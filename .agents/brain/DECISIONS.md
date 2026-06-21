@@ -27,4 +27,6 @@
   Cover image / source URL / author stay deferred until a feature needs them — don't add
   speculative columns. (Session 2026-06-21, M1.)
 
+- **D8 — Duplicate book imports raise 409 Conflict.** When importing a book, if a book with the same title already exists in the target language, we return a `409 Conflict` containing the existing book metadata. This avoids accidental duplicate shelf-cards. (Session 2026-06-21, M2.)
+
 ---

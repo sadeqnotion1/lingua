@@ -3,7 +3,7 @@
 > Single source of truth. If this disagrees with the real code, the **code wins** —
 > tell me and I fix the brain. Repo: https://github.com/sadeqnotion1/lingua
 
-**Status (one-liner):** M0–M1 done — data layer is modeled, seeded, and test-verified. Next up: **M2 — Library API**.
+**Status (one-liner):** M0–M2 done — data layer and library API are fully implemented and verified. Next up: **M3 — Library UI**.
 
 | Part | Status | Notes |
 |---|---|---|
@@ -11,8 +11,8 @@
 | Knowledge graph (`.agents/graph/`) | ✅ | ~52–53 nodes / ~58–70 edges. Regenerate via `render_graph.py`. |
 | Brain (`.agents/brain/`) | ✅ | This system. |
 | M1 Data layer (models/init_db/seed) | ✅ | Case-insensitive terms enforced (`UniqueConstraint` on `language_id`+`text_lower`); seed = 1 lang / 1 book / 2 texts / 5 terms (incl. parent-term link); `pytest` green (3 tests). |
-| M2 Library API | ⬜ | Routers are stubs. **← NEXT** |
-| M3 Library UI (shelves + import bar) | ⬜ | Matches screenshot 1. |
+| M2 Library API | ✅ | Endpoints for listing books grouped by language and importing books implemented; duplicate checks (raise 409 Conflict + return existing) in place; 9 unit tests green. |
+| M3 Library UI (shelves + import bar) | ⬜ | Matches screenshot 1. **← NEXT** |
 | M4 Tokenizer (`services/parser.py`) | ⬜ | `tokenize()` raises NotImplementedError. CORE. |
 | M5 Reader | ⬜ | Word-by-word render + status colors. |
 | M6 Terms (status, parent, translation) | ⬜ | |
@@ -20,7 +20,6 @@
 | M8 Polish (stats, search, settings) | ⬜ | |
 
 ## Open decisions / questions waiting on you
-- **M2 decision:** duplicate book imports → raise error / allow duplicates / append? (also in NEXT.md)
 - **D5 (still open):** keep `.agents/` tracked in the public repo, or re-ignore it?
 
 ## Known risks / watch-items

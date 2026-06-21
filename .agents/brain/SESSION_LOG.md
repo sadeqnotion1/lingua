@@ -1,6 +1,17 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-21 — M2 Library API ✅ (build + wrap-up)
+- Completed **M2 — Library API** by applying the M2 delivery package.
+- `backend/app/schemas/library.py`: added schemas (`BookOut`, `LanguageGroup`, `ImportRequest`, `ImportResponse`). Updated to use standard `typing` types for compatibility with Python 3.9.
+- `backend/app/services/library.py`: implemented service logic (`list_books_grouped`, `import_text`, `resolve_or_create_language`) with custom duplicate checking. Updated to use standard `typing` types for compatibility with Python 3.9.
+- `backend/app/routers/library.py`: implemented endpoints `GET /api/library/books` and `POST /api/library/import`.
+- `backend/tests/test_library_api.py`: added 6 tests covering grouped listing and book importing with duplicates/defaults.
+- Verified test suite: all 9 tests passed.
+- Decisions recorded: **D8** (duplicate book imports raise `409 Conflict`).
+- Committed + pushed to `main`.
+- **Stop point:** M2 complete & pushed. Next chat targets **M3 — Library UI**.
+
 ## 2026-06-21 — M1 Data layer ✅ (build + wrap-up)
 - Completed **M1 — Data layer** by applying the M1 delivery (`APPLY.md`).
 - `backend/app/models/term.py`: added case-insensitive `UniqueConstraint("language_id","text_lower")` (`uq_term_lang_lower`).
