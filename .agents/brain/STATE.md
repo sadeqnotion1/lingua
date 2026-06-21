@@ -8,7 +8,7 @@
 | Scaffold & wiring | ✅ | FastAPI + SQLAlchemy + SQLite backend, React+Vite+TS SPA. Boots, `/api/health` works. |
 | Knowledge graph (`.agents/graph/`) | ✅ | ~52–53 nodes / ~58–70 edges. Regenerate via `build_graph_html.py`. |
 | Brain (`.agents/brain/`) | ✅ | This system. |
-| M1 Data layer (models/init_db/seed) | ⬜ | Models exist as classes; need verified `init_db`, real seed data, a smoke test. |
+| M1 Data layer (models/init_db/seed) | ✅ | Case-insensitive terms enforced, seed data populated, test suite verified. |
 | M2 Library API | ⬜ | Routers are stubs. |
 | M3 Library UI (shelves + import bar) | ⬜ | Matches screenshot 1. |
 | M4 Tokenizer (`services/parser.py`) | ⬜ | `tokenize()` raises NotImplementedError. CORE. |

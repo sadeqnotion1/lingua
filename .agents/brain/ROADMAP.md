@@ -7,7 +7,7 @@ Don't start the next one until the current one's acceptance criteria pass.
 ---
 
 - **M0 — Scaffold & wiring** ✅ — FastAPI + SQLAlchemy + SQLite backend, React+Vite+TS SPA; boots, `/api/health` OK.
-- **M1 — Data layer** — models, `init_db()`, `seed.py`; seed + query back; `pytest` passes.
+- **M1 — Data layer** ✅ — models, `init_db()`, `seed.py`; seed + query back; `pytest` passes.
 - **M2 — Library API** — real endpoints for books/texts (replace router stubs).
 - **M3 — Library UI** — shelves + search/import bar (matches screenshot 1).
 - **M4 — Tokenizer** (`services/parser.py`) — implement `tokenize()`. CORE.

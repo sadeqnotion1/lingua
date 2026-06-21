@@ -37,3 +37,4 @@ post a line beginning exactly `🔔 NEW CHAT NOTICE`, say why (context vs. miles
 and wait for my wrap-up prompt before stopping.
 
 This prompt is overridden by my direct chat instructions.
+my pc is E:\Projects\lingua and github is https://github.com/sadeqnotion1/lingua starts rest same so you don’t need my pc lol
