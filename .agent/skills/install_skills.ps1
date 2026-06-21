@@ -27,8 +27,9 @@ $skills = @(
 )
 
 # Workspace Customization Root for Antigravity is ".agents"
-$destDir = Join-Path (Get-Location) ".agents/skills"
-$tempDir = Join-Path (Get-Location) ".agent/skills/temp"
+$repoRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+$destDir = Join-Path $repoRoot ".agents/skills"
+$tempDir = Join-Path $repoRoot ".agent/skills/temp"
 
 Write-Host "====================================================================" -ForegroundColor Cyan
 Write-Host " Antigravity Skills Installer" -ForegroundColor Cyan
