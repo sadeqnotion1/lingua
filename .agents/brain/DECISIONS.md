@@ -19,5 +19,12 @@
       secrets ever land in `.agents/`.
     - **(b) Re-ignore it** — add `.agents/` back to `.gitignore` and `git rm -r --cached .agents`;
       then context must be attached/pasted each chat.
+- **D6 — Terms are case-insensitive.** A term's identity is `(language_id, text_lower)`;
+  "The" and "the" are the same term. Enforced at the DB level by `UniqueConstraint
+  uq_term_lang_lower`; `seed.py` (and future ingest) must set `text_lower = text.lower()`.
+  (Session 2026-06-21, M1.)
+- **D7 — Start language = English; no extra Book/Text fields yet.** Seed ships English only.
+  Cover image / source URL / author stay deferred until a feature needs them — don't add
+  speculative columns. (Session 2026-06-21, M1.)
 
 ---
