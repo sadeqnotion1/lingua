@@ -2,6 +2,9 @@
 // overlaid count badge, then title + source below. Bound to REAL backend data
 // only (title, source, cover_url, page_count) — no fabricated "% new words",
 // likes, or progress (those don't exist server-side until M5 Reader / M6 Terms).
+//
+// POLISH PASS (design): the cover image now lives in its own inner layer
+// (.lib3-card__img) so it can hover-zoom without dragging the badges/lang chip.
 export interface LessonCardProps {
 	title: string
 	source?: string | null
@@ -47,15 +50,21 @@ export default function LessonCard({
 	const pages = pageCount ?? 0
 	return (
 		<article className="lib3-card" tabIndex={0} aria-label={title}>
-			<div
-				className="lib3-card__cover"
-				style={coverUrl ? { backgroundImage: `url(${coverUrl})` } : undefined}
-			>
-				{!coverUrl && (
-					<span className="lib3-card__placeholder" aria-hidden="true">
-						{initials(title)}
-					</span>
-				)}
+			<div className="lib3-card__cover">
+				<div
+					className={
+						coverUrl
+							? "lib3-card__img"
+							: "lib3-card__img lib3-card__img--placeholder"
+					}
+					style={coverUrl ? { backgroundImage: `url(${coverUrl})` } : undefined}
+				>
+					{!coverUrl && (
+						<span className="lib3-card__initials" aria-hidden="true">
+							{initials(title)}
+						</span>
+					)}
+				</div>
 				{languageName && <span className="lib3-card__lang">{languageName}</span>}
 				<div className="lib3-card__badges">
 					<span
