@@ -28,9 +28,8 @@ $skills = @(
 
 # Workspace Customization Root for Antigravity is ".agents"
 $repoRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
-$destDir1 = Join-Path $repoRoot ".agent/skills"
-$destDir2 = Join-Path $repoRoot ".agents/skills"
-$tempDir = Join-Path $repoRoot ".agent/skills/temp"
+$destDir = Join-Path $repoRoot ".agents/skills"
+$tempDir = Join-Path $repoRoot ".agents/skills/temp"
 
 Write-Host "====================================================================" -ForegroundColor Cyan
 Write-Host " Antigravity Skills Installer" -ForegroundColor Cyan
@@ -38,8 +37,7 @@ Write-Host " Target Directory: $destDir" -ForegroundColor Cyan
 Write-Host "====================================================================" -ForegroundColor Cyan
 
 # Create directories
-New-Item -ItemType Directory -Force $destDir1 | Out-Null
-New-Item -ItemType Directory -Force $destDir2 | Out-Null
+New-Item -ItemType Directory -Force $destDir | Out-Null
 New-Item -ItemType Directory -Force $tempDir | Out-Null
 
 $clonedRepos = @{}
@@ -101,25 +99,14 @@ foreach ($skill in $skills) {
     }
     
     if ($foundPath) {
-        $targetDest1 = Join-Path $destDir1 $skill.Name
-        $targetDest2 = Join-Path $destDir2 $skill.Name
+        $targetDest = Join-Path $destDir $skill.Name
         
-        # Copy to .agent/skills
-        if (Test-Path $targetDest1) {
-            Remove-Item -Recurse -Force $targetDest1 | Out-Null
+        if (Test-Path $targetDest) {
+            Remove-Item -Recurse -Force $targetDest | Out-Null
         }
-        Copy-Item -Path $foundPath -Destination $targetDest1 -Recurse -Force
-        if (Test-Path (Join-Path $targetDest1 ".git")) {
-            Remove-Item -Recurse -Force (Join-Path $targetDest1 ".git") | Out-Null
-        }
-
-        # Copy to .agents/skills
-        if (Test-Path $targetDest2) {
-            Remove-Item -Recurse -Force $targetDest2 | Out-Null
-        }
-        Copy-Item -Path $foundPath -Destination $targetDest2 -Recurse -Force
-        if (Test-Path (Join-Path $targetDest2 ".git")) {
-            Remove-Item -Recurse -Force (Join-Path $targetDest2 ".git") | Out-Null
+        Copy-Item -Path $foundPath -Destination $targetDest -Recurse -Force
+        if (Test-Path (Join-Path $targetDest ".git")) {
+            Remove-Item -Recurse -Force (Join-Path $targetDest ".git") | Out-Null
         }
         
         Write-Host "  [SUCCESS] Installed $($skill.Name)" -ForegroundColor Green

@@ -1,13 +1,13 @@
 # agent.md — LinguaRead
 
 > Local orientation file for CLI AI coding agents (Codex, Claude Code, Cursor, etc.).
-> **Location:** `.agent/agent.md`. The `.agent/` folder is **gitignored** — it is
+> **Location:** `.agents/agent.md`. The `.agents/` folder is **gitignored** — it is
 > local working context, not committed to the repo.
 > Repo: https://github.com/sadeqnotion1/lingua
 >
 > Read this first. It tells you what the project is, how it's wired, where things
 > live, how to run it, and the conventions to respect. A machine-readable
-> knowledge graph of the whole repo lives in **`.agent/graph/`** — query it
+> knowledge graph of the whole repo lives in **`.agents/graph/`** — query it
 > before re-reading source.
 
 ## What this is
@@ -36,7 +36,7 @@ job as an agent is usually to implement those stubs without breaking the wiring.
 
 ```
 lingua/
-  .agent/                 # gitignored local agent context (NOT committed)
+  .agents/                 # gitignored local agent context (NOT committed)
     agent.md              # <- you are here
     graph/                # repo knowledge graph (see "The knowledge graph")
       graph.json          # machine-readable graph
@@ -73,7 +73,7 @@ lingua/
       styles/global.css
 ```
 
-> Note: the graph and this file live under `.agent/` (local only). The committed
+> Note: the graph and this file live under `.agents/` (local only). The committed
 > repo is everything else. Don't move graph artifacts into the tracked tree unless
 > you intend to commit them.
 
@@ -101,20 +101,20 @@ the backend itself, so it's same-origin.
 
 ## The knowledge graph (use it)
 
-A Graphify knowledge graph of the whole repo lives in **`.agent/graph/`** so you
+A Graphify knowledge graph of the whole repo lives in **`.agents/graph/`** so you
 don't have to re-derive structure by grepping every file:
 
-- **`.agent/graph/graph.json`** — the graph (53 nodes, 70 edges). Each node:
+- **`.agents/graph/graph.json`** — the graph (53 nodes, 70 edges). Each node:
   `id, label, type, location, summary, community, degree`. Each edge:
   `source, target, type, confidence, evidence`. `confidence` is `EXTRACTED`
   (read from code), `INFERRED` (deduced from naming/usage), or `AMBIGUOUS`
   (intended, not yet wired).
-- **`.agent/graph/GRAPH_REPORT.md`** — human digest: god nodes, communities,
+- **`.agents/graph/GRAPH_REPORT.md`** — human digest: god nodes, communities,
   surprising couplings, suggested questions, confidence summary.
-- **`.agent/graph/graph.html`** — open in a browser for an interactive view.
+- **`.agents/graph/graph.html`** — open in a browser for an interactive view.
 - **Regenerate** the HTML after editing the JSON:
-  `python .agent/graph/build_graph_html.py`.
-  If you change the codebase structure, update `.agent/graph/graph.json` to match.
+  `python .agents/graph/build_graph_html.py`.
+  If you change the codebase structure, update `.agents/graph/graph.json` to match.
 
 ### How to use the graph in a task
 
@@ -129,13 +129,13 @@ don't have to re-derive structure by grepping every file:
 
 ```bash
 # what connects to the FastAPI app?
-jq '.edges[] | select(.source=="app.main:app" or .target=="app.main:app")' .agent/graph/graph.json
+jq '.edges[] | select(.source=="app.main:app" or .target=="app.main:app")' .agents/graph/graph.json
 # everything in one community
-jq '.nodes[] | select(.community=="domain")' .agent/graph/graph.json
+jq '.nodes[] | select(.community=="domain")' .agents/graph/graph.json
 # all the inferred / not-yet-solid edges
-jq '.edges[] | select(.confidence!="EXTRACTED")' .agent/graph/graph.json
+jq '.edges[] | select(.confidence!="EXTRACTED")' .agents/graph/graph.json
 # list communities
-jq '.communities[] | {id, name}' .agent/graph/graph.json
+jq '.communities[] | {id, name}' .agents/graph/graph.json
 ```
 
 ### Central nodes (high blast radius — change carefully)
@@ -171,11 +171,11 @@ jq '.communities[] | {id, name}' .agent/graph/graph.json
 - **Term status:** integer familiarity level (Lute convention, 0-99); don't turn
   it into an enum/string without updating the schema and graph.
 - **Keep the tracked root clean:** committed root holds only `run.*`, `README.md`,
-  `.gitignore`, `backend/`, `frontend/`. Local agent context stays in `.agent/`.
+  `.gitignore`, `backend/`, `frontend/`. Local agent context stays in `.agents/`.
   Put docs in `backend/docs/`, tooling in `backend/tools/`.
 - **Stubs first:** the highest-value TODOs are `services/parser.py:tokenize()`
   and the router handler bodies. Implement these before adding new surface area.
-- **Don't commit the DB or `.agent/`:** `backend/data/*.db` and `.agent/` are
+- **Don't commit the DB or `.agents/`:** `backend/data/*.db` and `.agents/` are
   gitignored.
 
 ## Definition of done (quality gate)
@@ -186,13 +186,13 @@ Before declaring a change complete:
 2. `pytest backend/tests` — tests pass (`test_health` at minimum).
 3. `cd frontend && npm run build` — SPA builds (if you touched frontend).
 4. App boots via `./run.sh` and `GET /api/health` returns OK.
-5. If structure changed, update `.agent/graph/graph.json` and regenerate
+5. If structure changed, update `.agents/graph/graph.json` and regenerate
    `graph.html`; confirm `graph.json` is valid JSON and every edge endpoint is a
    real node id.
 
 ## Pointers
 
-- Repo knowledge graph: `.agent/graph/` (`graph.json`, `GRAPH_REPORT.md`, `graph.html`)
+- Repo knowledge graph: `.agents/graph/` (`graph.json`, `GRAPH_REPORT.md`, `graph.html`)
 - Decisions & rationale: `backend/docs/ARCHITECTURE.md`
 - Change log: `backend/docs/CHANGELOG.md`
 - Upstream domain reference: Lute v3 — https://github.com/LuteOrg/lute-v3

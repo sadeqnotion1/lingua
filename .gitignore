@@ -22,7 +22,7 @@ backend/app/static/*
 *.env
 .env
 sessions.jsonl
-.agent/fixes/
+.agents/fixes/
 
 # os / editor
 .DS_Store
