@@ -12,8 +12,8 @@
 | Brain (`.agents/brain/`) | ✅ | This system. |
 | M1 Data layer (models/init_db/seed) | ✅ | Case-insensitive terms enforced (`UniqueConstraint` on `language_id`+`text_lower`); seed = 1 lang / 1 book / 2 texts / 5 terms (incl. parent-term link); `pytest` green (3 tests). |
 | M2 Library API | ✅ | Endpoints for listing books grouped by language and importing books implemented; duplicate checks (raise 409 Conflict + return existing) in place; 9 unit tests green. |
-| M3 Library UI (shelves + import bar) | ⬜ | Matches screenshot 1. **← NEXT** |
-| M4 Tokenizer (`services/parser.py`) | ⬜ | `tokenize()` raises NotImplementedError. CORE. |
+| M3 Library UI (shelves + import bar) | ✅ | Matches screenshot 1. |
+| M4 Tokenizer (`services/parser.py`) | ⬜ | `tokenize()` raises NotImplementedError. CORE. **← NEXT** |
 | M5 Reader | ⬜ | Word-by-word render + status colors. |
 | M6 Terms (status, parent, translation) | ⬜ | |
 | M7 Account page | ⬜ | Matches screenshot 2. |
