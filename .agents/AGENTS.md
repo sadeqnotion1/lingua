@@ -6,10 +6,10 @@
 
 ## Project
 
-- **Name:** project_name  (default: LinguaRead)
-- **Repo:** repo_url  (default: github.com/sadeqnotion1/lingua)
-- **One-line purpose:** what the project does in one sentence
-- **Primary stack:** e.g. Python backend + web/QML frontend
+- **Name:** LinguaRead
+- **Repo:** github.com/sadeqnotion1/lingua
+- **One-line purpose:** Self-hosted language-learning reader (ported from Lute v3) to import texts, read them, and track term familiarity.
+- **Primary stack:** FastAPI (Python) backend + React/Vite/TypeScript frontend
 
 ## Boot sequence (in order, every session)
 
