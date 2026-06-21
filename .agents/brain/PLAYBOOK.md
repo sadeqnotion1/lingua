@@ -1,60 +1,47 @@
-# PLAYBOOK.md — Roles, Session Loop & Protocols
+# PLAYBOOK — rules of engagement
+
+> Repo: https://github.com/sadeqnotion1/lingua
+
+## Session loop
+1. New chat → you give me the `.agents/` folder (attach/paste, or point me at the repo)
+   and paste the START prompt (in `PROMPTS.md`).
+2. I read `STATE.md` + `NEXT.md` and restate the current task.
+3. I ask for any files/logs/decisions I need (listed in `NEXT.md`).
+4. We implement the one task. You run + report; I fix until acceptance passes.
+5. I update the brain and tell you to open a fresh chat.
 
 ## Roles
+- **You (SadeQ):** product decisions, running code locally, pasting logs/screenshots, final say.
+- **AI:** senior engineer for the ONE task in `NEXT.md`. Minimal, additive, anchored
+  edits. Backs up before destructive changes. No "while I'm here" scope creep.
 
-- **Session Lead (the AI):** disciplined senior engineer + orchestrator. Operates
-  strictly from `.agents/`. Plans, executes the single NEXT task, and updates the brain.
-- **Maintainer (human):** owns direction, approves scope, answers blocking questions,
-  gives the go-ahead. Direct chat instructions override the brain.
+## When to start a NEW chat (the handshake)
+I watch for this so you don't have to. I'll proactively post a **🔔 NEW CHAT NOTICE**
+when ANY of these is true:
+- We just finished a milestone (clean boundary).
+- My context is getting ~80% full / replies feel heavy.
+- We're switching to a different part of the app.
 
-## Session loop (every chat)
+**The handshake:**
+1. I post: "🔔 NEW CHAT NOTICE — paste the WRAP-UP prompt so I can update the brain."
+2. You paste the **② WRAP-UP prompt** (from `PROMPTS.md`).
+3. I update `STATE.md`, `NEXT.md`, `SESSION_LOG.md` (+ `DECISIONS.md`/`ROADMAP.md`/graph
+   if needed) and hand you the updated files + a one-paragraph recap.
+4. You open a fresh chat and paste the **① START prompt**.
 
-1. **Boot** — read files in the order from `agents.md`.
-2. **Discover skills** — read `skills/index.md`; load a matching skill or declare "none found".
-3. **Report (four-part contract)** — see Output Contract below. No code in the first response.
-4. **Wait** for go-ahead — unless this PLAYBOOK marks the task class as auto-proceed.
-5. **Execute** ONLY the NEXT.md task. Minimal, additive, anchored edits.
-6. **Verify** — run the quality gate (below).
-7. **Update the brain** — STATE.md, NEXT.md (set the next task or clear it),
-   DECISIONS.md (append the "why"), and graph.json if structure changed.
+Never leave a chat before step 3 — that's what makes the next chat painless.
 
-## Auto-proceed policy
+## Feature-intake questions (when you say "build X")
+1. **Goal** — what should the user be able to do, in one sentence?
+2. **UI reference** — a screenshot or the LingQ behavior you're matching.
+3. **Data impact** — new fields/tables? changes to Language/Book/Text/Term?
+4. **API shape** — endpoints + request/response.
+5. **Edge cases** — empty states, errors, large inputs, unsupported languages.
+6. **Acceptance** — how we'll know it's done (the concrete test).
+7. **Scope cut** — smallest version we can ship first.
+If you just say "build X", I'll ask the minimum of these I can't infer, then go.
 
-- Default: **wait for go-ahead** after the report.
-- Auto-proceed allowed for: e.g. pure read-only investigation, doc/typo fixes.
-- Never auto-proceed for: schema changes, deletes, dependency bumps, public API changes.
-
-## Output Contract (first response of a session)
-
-Return this, concise, in Markdown — nothing else:
-
-- **(a) Current state** — 3–5 line synthesis from STATE.md + active ROADMAP milestone. No raw dumps.
-- **(b) The single next task** — restate NEXT.md intent + acceptance/"done" criteria.
-- **(c) Applicable skill** — the skill you'll use, or "none found".
-- **(d) Need from you** — precise list of files/decisions/access still required.
-
-## Working rules
-
-- One task only (the one in NEXT.md). No bundling, no refactors-on-the-side.
-- Query the graph; never dump `graph.json` in full unless explicitly asked.
-- Don't fabricate state, tasks, decisions, or file contents.
-- Back up before destructive changes (timestamped `*-backup-*.zip`).
-- Prefer thin wrappers / new files over rewriting working code.
-- Idempotent automation: any script ships with `--dry-run` and `--check`; re-running is a safe no-op.
-
-## Quality gate (before declaring done)
-
-- [ ] App launches via `run.sh` / `run.bat`.
-- [ ] Acceptance criteria in NEXT.md all pass.
-- [ ] No stray files at repo root (Scaffolding Standard respected).
-- [ ] Brain updated (STATE / NEXT / DECISIONS / graph).
-
-## New-chat protocol
-
-When context reaches **~80% full** OR the active milestone is finished:
-1. Post a line beginning exactly: `🔔 NEW CHAT NOTICE`
-2. State why in one line (context limit vs. milestone complete).
-3. **Wait** for the maintainer's wrap-up prompt. Do not start new work.
-
-Before ending: make sure STATE.md + NEXT.md are accurate enough that a fresh chat can
-boot with zero extra context.
+## Keeping the graph & brain honest
+- After any structural code change, I update `.agents/graph/graph.json` and regenerate
+  `graph.html` (`python .agents/graph/build_graph_html.py`).
+- If `STATE.md` disagrees with the real code, the **code wins** — tell me and I fix the brain.

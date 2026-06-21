@@ -1,34 +1,25 @@
-# STATE.md — Where We Are
+# STATE — where we are right now
 
-> Living document. Update at the **end** of every session. Keep it to the present
-> reality, not history (history lives in DECISIONS.md and git).
+> Single source of truth. If this disagrees with the real code, the **code wins** —
+> tell me and I fix the brain. Repo: https://github.com/sadeqnotion1/lingua
 
-_Last updated: YYYY-MM-DD by who_
+| Part | Status | Notes |
+|---|---|---|
+| Scaffold & wiring | ✅ | FastAPI + SQLAlchemy + SQLite backend, React+Vite+TS SPA. Boots, `/api/health` works. |
+| Knowledge graph (`.agents/graph/`) | ✅ | ~52–53 nodes / ~58–70 edges. Regenerate via `build_graph_html.py`. |
+| Brain (`.agents/brain/`) | ✅ | This system. |
+| M1 Data layer (models/init_db/seed) | ⬜ | Models exist as classes; need verified `init_db`, real seed data, a smoke test. |
+| M2 Library API | ⬜ | Routers are stubs. |
+| M3 Library UI (shelves + import bar) | ⬜ | Matches screenshot 1. |
+| M4 Tokenizer (`services/parser.py`) | ⬜ | `tokenize()` raises NotImplementedError. CORE. |
+| M5 Reader | ⬜ | Word-by-word render + status colors. |
+| M6 Terms (status, parent, translation) | ⬜ | |
+| M7 Account page | ⬜ | Matches screenshot 2. |
+| M8 Polish (stats, search, settings) | ⬜ | |
 
-## Current milestone
+## Open decisions / questions waiting on you
+- None right now. (When I need a product decision I'll list it here and in `NEXT.md`.)
 
-- **Milestone:** M-x: name  (see ROADMAP.md)
-- **Status:** on track | blocked | needs decision
-
-## What works right now
-
-- Feature / module that is functional and verified
-- ...
-
-## In progress
-
-- What is partially done, with the file(s) involved
-
-## Known issues / risks
-
-- Bug or risk — severity low/med/high — where
-
-## Environment / how to run
-
-- Run: `./run.sh` (macOS/Linux) · `run.bat` (Windows)
-- Key entry point: backend/<entry>
-- Required secrets / env: names only, never values
-
-## Open questions for the maintainer
-
-- Anything blocking that needs a human decision
+## Known risks / watch-items
+- `.agents/` is currently committed to the public repo (see DECISIONS D5) — confirm that's intended.
+- Path spelling standardized to `.agents/` (older notes said `.agent/`).

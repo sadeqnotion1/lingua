@@ -1,9 +1,48 @@
-<!doctype html>
+#!/usr/bin/env python3
+"""Render .agents/graph/graph.json into a self-contained graph.html.
+
+Usage:
+    python .agents/graph/render_graph.py            # reads graph.json next to this file
+    python .agents/graph/render_graph.py path.json  # explicit input
+
+The output graph.html is fully offline (no CDN): data is embedded and a tiny
+vanilla-JS canvas force layout draws the nodes/edges. Re-run after editing
+graph.json. Idempotent: same input -> same output.
+"""
+import json
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+
+
+def main() -> int:
+    src = Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "graph.json"
+    out = HERE / "graph.html"
+    if not src.exists():
+        print(f"[render_graph] input not found: {src}", file=sys.stderr)
+        return 1
+    data = json.loads(src.read_text(encoding="utf-8"))
+    nodes = data.get("nodes", [])
+    edges = data.get("edges", [])
+    project = data.get("project", "project")
+    payload = json.dumps({"nodes": nodes, "edges": edges}, ensure_ascii=False)
+    html = _TEMPLATE.replace("__PROJECT__", str(project)).replace(
+        "__DATA__", payload
+    ).replace("__NODE_COUNT__", str(len(nodes))).replace(
+        "__EDGE_COUNT__", str(len(edges))
+    )
+    out.write_text(html, encoding="utf-8")
+    print(f"[render_graph] wrote {out} ({len(nodes)} nodes, {len(edges)} edges)")
+    return 0
+
+
+_TEMPLATE = r"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>project_name — knowledge graph</title>
+<title>__PROJECT__ — knowledge graph</title>
 <style>
   :root { color-scheme: light dark; }
   body { margin: 0; font: 14px/1.4 system-ui, sans-serif; background: #0f1115; color: #e6e6e6; }
@@ -22,8 +61,8 @@
 </head>
 <body>
 <header>
-  <h1>project_name — knowledge graph</h1>
-  <span class="meta">3 nodes · 2 edges · drag to pan, scroll to zoom</span>
+  <h1>__PROJECT__ — knowledge graph</h1>
+  <span class="meta">__NODE_COUNT__ nodes · __EDGE_COUNT__ edges · drag to pan, scroll to zoom</span>
 </header>
 <div id="wrap">
   <canvas id="c"></canvas>
@@ -35,7 +74,7 @@
   </aside>
 </div>
 <script>
-const GRAPH = {"nodes": [{"id": "backend", "type": "module", "path": "backend/", "summary": "What the backend module is responsible for"}, {"id": "frontend", "type": "module", "path": "frontend/", "summary": "What the frontend module is responsible for"}, {"id": "backend/entry", "type": "file", "path": "backend/entry.py", "summary": "Entry point responsibilities", "symbols": ["main", "..."]}], "edges": [{"from": "backend", "to": "backend/entry", "type": "contains"}, {"from": "frontend", "to": "backend/entry", "type": "depends_on", "note": "e.g. calls HTTP API"}]};
+const GRAPH = __DATA__;
 const colors = {module:'#6ea8fe',file:'#7ee787',function:'#f0b86e',class:'#d2a8ff',route:'#ff7b9c',asset:'#56d4dd',doc:'#c9d1d9',external:'#8b949e'};
 const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
 let W,H,scale=1,ox=0,oy=0;
@@ -71,3 +110,8 @@ GRAPH.nodes.forEach(n=>{ const d=document.createElement('div'); d.className='nod
 </script>
 </body>
 </html>
+"""
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,24 +1,23 @@
-# DECISIONS.md — Decision Log (append-only)
+# DECISIONS — the "why"
 
-> Append a new entry whenever a non-trivial decision is made. Never rewrite or delete
-> past entries — supersede them with a new dated entry instead. This is the project's
-> "why" memory.
+> Repo: https://github.com/sadeqnotion1/lingua
 
-## Format
-
-```
-### YYYY-MM-DD — short title
-- **Context:** what prompted the decision
-- **Decision:** what we chose
-- **Alternatives considered:** what we rejected and why
-- **Consequences:** follow-ups / things now constrained
-- **Supersedes:** (optional) link to the entry this replaces
-```
+- **D1 — FastAPI over Flask.** Lute v3 is Flask + server-rendered templates. We want a
+  separate SPA, so an API-first framework fits better. Domain logic still ports over.
+- **D2 — React + Vite + TypeScript SPA.** Fast dev server, typed client, clean split
+  from the backend. Dev proxy `:5173 → :8000`; prod served from `frontend/dist`.
+- **D3 — SQLite, local-first.** Matches Lute's model; zero-config; file at
+  `backend/data/lingua.db`.
+- **D4 — Domain modeled on Lute v3.** Language → Book → Text → Term, parent terms via
+  `Term.parent_id`, numeric `status` (0-99 familiarity).
+- **D5 — `.agents/` location.** Holds `agent.md`, the knowledge graph (`.agents/graph/`),
+  and this brain (`.agents/brain/`).
+  ⚠️ **NEEDS A DECISION:** originally declared "gitignored, local-only, not committed" —
+  but the folder is currently committed to the public repo (that's how a fresh chat can
+  pull it from GitHub). Pick ONE and update this line:
+    - **(a) Keep it tracked** — chats pull context straight from the repo. Make sure no
+      secrets ever land in `.agents/`.
+    - **(b) Re-ignore it** — add `.agents/` back to `.gitignore` and `git rm -r --cached .agents`;
+      then context must be attached/pasted each chat.
 
 ---
-
-### YYYY-MM-DD — Adopted `.agents/` brain v2
-- **Context:** Needed zero-context-loss handoffs between AI sessions.
-- **Decision:** Standardized on this brain layout (agents.md + brain/ + graph/ + skills/).
-- **Alternatives considered:** Single monolithic NOTES.md (too coarse); issue tracker only (no orientation).
-- **Consequences:** Every session boots through agents.md; brain must be updated at session end.

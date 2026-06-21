@@ -17,8 +17,14 @@
 2. `brain/NEXT.md`      → the ONE next task + what to hand you
 3. `brain/ROADMAP.md`   → the **current milestone only**
 4. `brain/PLAYBOOK.md`  → roles + session loop + protocols
-5. `graph/graph.json`   → **query as needed; never dump it in full**
-6. `skills/index.md`    → discover skills; load one if it matches NEXT.md
+5. `brain/DECISIONS.md` → skim the latest decisions (the "why")
+6. `graph/graph.json`   → **query as needed; never dump it in full**
+7. `skills/index.md`    → discover skills; load one if it matches NEXT.md
+
+## Prompts
+
+- `prompts/start.md`   → the #START kickoff prompt.
+- `prompts/wrap-up.md` → the #WRAP_UP closing prompt.
 
 ## Repo layout (high level)
 
@@ -41,6 +47,7 @@ repo-root/
   relationships. Use it to answer "what calls what" / "where does X live" **without**
   reading the whole codebase.
 - **Query, don't dump.** Pull only the nodes/edges you need. See `graph/README.md`.
+- Regenerate the visual `graph/graph.html` with `python .agents/graph/render_graph.py`.
 
 ## Hard rules (summary — full rules in PLAYBOOK.md)
 

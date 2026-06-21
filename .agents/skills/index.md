@@ -1,22 +1,18 @@
-# Skills Registry
+# Skills index
 
-Skills are specialized, reusable playbooks the session lead can load for specific
-task types. During boot, the AI reads this index; if a skill matches the task in
-`NEXT.md`, it loads that skill's `SKILL.md` and follows it exactly. If none match,
-it says "none found" and proceeds with PLAYBOOK defaults.
+> Load a matching skill for the current `NEXT.md` task, or report "none found".
+> Repo: https://github.com/sadeqnotion1/lingua
 
-## How to use
+| Skill | Use when |
+|---|---|
+| `frontend-design` | Visual/UX polish, copy/tone for the SPA. |
+| `design-taste-frontend` | Typography/layout taste pass on UI. |
+| `ui-ux-pro-max` | Deeper UI/UX system + component decisions. |
+| `vercel-react-best-practices` | React/Vite performance & patterns. |
+| `systematic-debugging` | Root-cause tracing for stubborn bugs. |
 
-1. Match the NEXT.md task against the **When to use** column below.
-2. Open `skills/<name>/SKILL.md` and follow it step by step.
-3. If a skill has scripts/refs, run/read them as instructed inside SKILL.md.
+_Backend/data-layer tasks (e.g. M1) usually have **no** matching skill — say so._
 
-## Registered skills
-
-| Skill | When to use | Path |
-|-------|-------------|------|
-| _template | Reference for authoring new skills (not a real skill) | `skills/_template/SKILL.md` |
-| skill-name | one-line trigger condition | `skills/skill-name/SKILL.md` |
-
-> Add a row for every skill. Keep "When to use" specific enough that matching is
-> unambiguous. Remove the `_template` row reference once you have real skills.
+> NOTE: this index lists the skill folders shipped under `.agents/skills/`. The ZIP
+> from this session only rebuilds the brain + AGENT.md; keep your existing
+> `.agents/skills/` and `.agents/graph/` folders as-is.

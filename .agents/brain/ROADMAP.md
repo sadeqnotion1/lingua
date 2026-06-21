@@ -1,28 +1,21 @@
-# ROADMAP.md — Milestones
+# ROADMAP — ordered build plan
+Build in order. Each milestone is small enough to finish in roughly one chat.
+Don't start the next one until the current one's acceptance criteria pass.
 
-> Only the **current** milestone is "active". The AI reads the active milestone only
-> unless explicitly asked to look ahead. Keep milestones small and shippable.
-
-## ▶ Active: M-2: name
-
-**Goal:** One sentence outcome.
-
-**Definition of done:**
-- [ ] Shippable outcome 1
-- [ ] Shippable outcome 2
-
-**Scoped tasks (feed these into NEXT.md one at a time):**
-1. task
-2. task
-3. task
+> Repo: https://github.com/sadeqnotion1/lingua
 
 ---
 
-## ✔ Done
+- **M0 — Scaffold & wiring** ✅ — FastAPI + SQLAlchemy + SQLite backend, React+Vite+TS SPA; boots, `/api/health` OK.
+- **M1 — Data layer** — models, `init_db()`, `seed.py`; seed + query back; `pytest` passes.
+- **M2 — Library API** — real endpoints for books/texts (replace router stubs).
+- **M3 — Library UI** — shelves + search/import bar (matches screenshot 1).
+- **M4 — Tokenizer** (`services/parser.py`) — implement `tokenize()`. CORE.
+- **M5 — Reader** — word-by-word render + status colors.
+- **M6 — Terms** — status, parent term, translation.
+- **M7 — Account page** — matches screenshot 2.
+- **M8 — Polish** — stats, search, settings.
 
-- **M-1: name** — one-line result (date)
-
-## ⏭ Later (not active — do not start)
-
-- **M-3: name** — one-line goal
-- **M-4: name** — one-line goal
+## Backlog / maybe-later
+- Audio + sentence playback, dictionary/translation API integration, SRS review
+  queue, export of known terms, multi-user/auth, deployment packaging.
