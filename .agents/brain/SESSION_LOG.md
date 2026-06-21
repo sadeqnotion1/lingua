@@ -1,6 +1,16 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-21 — M4 Tokenizer & M3 Design Polish ✅ (wrap-up)
+- Completed **M4 — Tokenizer** by applying the config-driven parser/tokenizer.
+  - `backend/app/services/parser.py`: Implemented Lute-style parser/tokenizer splitting text into lossless alternating runs of word/non-word strings, matching language config rules.
+  - `backend/tests/test_parser.py`: Created an expanded test suite covering 22 test cases and 81 parametrization scenarios.
+- Applied final design polish to **M3 — Library UI**:
+  - `frontend/src/styles/library.css`: Added font-smoothing, standard focus rings (`--ring`/`--ring-soft`), and hover zoom configurations.
+  - `frontend/src/components/LessonCard.tsx`: Refactored cover layout to isolate hover-zoom animation effects without dragging badges or chips.
+- Verified: Both frontend production builds and the backend test suite run cleanly (all 81 tests passed).
+- Committed + pushed to `main`.
+
 ## 2026-06-21 — M3 Library UI ✅ (build + wrap-up)
 - Completed **M3 — Library UI** by applying the M3 delivery package.
 - `frontend/src/api/client.ts`: replaced with full implementation for listing books and importing text. Added typed `BookOut`, `LanguageGroup`, `ImportRequest`, `ImportResponse`, and custom `ApiError` mapping for HTTP 409 duplicate book conflict warnings.

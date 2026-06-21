@@ -3,7 +3,7 @@
 > Single source of truth. If this disagrees with the real code, the **code wins** —
 > tell me and I fix the brain. Repo: https://github.com/sadeqnotion1/lingua
 
-**Status (one-liner):** M0–M2 done — data layer and library API are fully implemented and verified. Next up: **M3 — Library UI**.
+**Status (one-liner):** M0–M4 done — Library shelves, imports, dynamic styles, and tokenizer are complete and verified. Next up: **M5 — Reader**.
 
 | Part | Status | Notes |
 |---|---|---|
@@ -12,9 +12,9 @@
 | Brain (`.agents/brain/`) | ✅ | This system. |
 | M1 Data layer (models/init_db/seed) | ✅ | Case-insensitive terms enforced (`UniqueConstraint` on `language_id`+`text_lower`); seed = 1 lang / 1 book / 2 texts / 5 terms (incl. parent-term link); `pytest` green (3 tests). |
 | M2 Library API | ✅ | Endpoints for listing books grouped by language and importing books implemented; duplicate checks (raise 409 Conflict + return existing) in place; 9 unit tests green. |
-| M3 Library UI (shelves + import bar) | ✅ | Matches screenshot 1. |
-| M4 Tokenizer (`services/parser.py`) | ⬜ | `tokenize()` raises NotImplementedError. CORE. **← NEXT** |
-| M5 Reader | ⬜ | Word-by-word render + status colors. |
+| M3 Library UI (shelves + import bar) | ✅ | Matches screenshot 1. Polished with font-smoothing, focus rings, hover-zoom covers, and reduced motion paths. |
+| M4 Tokenizer (`services/parser.py`) | ✅ | Lossless, Lute-style alternating runs parser implemented and verified with 22 unit tests. |
+| M5 Reader | ⬜ | Word-by-word render + status colors. **← NEXT** |
 | M6 Terms (status, parent, translation) | ⬜ | |
 | M7 Account page | ⬜ | Matches screenshot 2. |
 | M8 Polish (stats, search, settings) | ⬜ | |
