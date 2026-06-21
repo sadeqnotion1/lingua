@@ -1,6 +1,6 @@
 # LinguaRead Knowledge Graph Report
 
-> Generated per the **Graphify Protocol**. Source of truth: `graph.json` (53 nodes, 70 edges). Interactive view: `graph.html`. Query the graph before re-reading source.
+> Generated per the **Graphify Protocol**. Source of truth: `graph.json` (52 nodes, 58 edges). Interactive view: `graph.html`. Query the graph before re-reading source.
 
 The repo is treated as **one graph** across layers: backend code ↔ SQLite schema ↔ frontend code ↔ build config ↔ docs. The interesting structure lives in the cross-layer edges.
 
@@ -8,12 +8,11 @@ The repo is treated as **one graph** across layers: backend code ↔ SQLite sche
 
 | Node | Degree | Why it matters |
 |---|---|---|
-| `app.main:app` (FastAPI instance) | 11 | Everything flows through it: CORS, startup `init_db`, all four routers, `/api/health`, and serving the SPA build. Largest blast radius in the repo. |
-| `app.models` (registry) | 6 | Imports all four ORM models so they register on `Base.metadata`; `init_db` depends on it. Structural hub of the domain layer. |
-| `api.client:api` (client.ts) | 6 | The **only** bridge from UI code to the backend; every page data call routes through it over HTTP. |
-| `frontend.App` (App.tsx) | 5 | SPA routing hub — the shell and every page hang off it. |
-| `db.tables:terms` | 5 | Most-connected table: FKs to languages plus the self-referential `parent_id`, and the read/write target of the terms API. |
-| `app.database:Base` | 5 | Declarative base all four models inherit; schema creation depends on it. |
+| `app.main:app` (FastAPI instance) | 10 | Everything flows through it: CORS, startup `init_db`, all four routers, `/api/health`, and serving the SPA build. Largest blast radius in the repo. |
+| `frontend.App` (App.tsx) | 6 | SPA routing hub — the shell and every page hang off it. |
+| `api.client:api` (client.ts) | 6 | The **only** bridge from UI code to the backend; every page data call routes through it. |
+| `app.database:Base` | 6 | Declarative base all four models inherit; schema creation depends on it. |
+| `app.database:get_db` | 4 | Shared session dependency injected into every data router. |
 
 ## Communities (subsystems)
 
@@ -50,8 +49,8 @@ The repo is treated as **one graph** across layers: backend code ↔ SQLite sche
 
 | Confidence | Count | Meaning |
 |---|---|---|
-| `EXTRACTED` | 60 | Read directly from code/structure (imports, inheritance, decorators, FKs, config). |
-| `INFERRED` | 9 | Deduced from naming/usage (e.g. HTTP route ↔ endpoint mapping, router → table reads). |
+| `EXTRACTED` | 49 | Read directly from code/structure (imports, inheritance, decorators, FKs, config). |
+| `INFERRED` | 8 | Deduced from naming/usage (e.g. HTTP route ↔ endpoint mapping, router → table reads). |
 | `AMBIGUOUS` | 1 | `get_text` → `parser.tokenize`: intended collaborator, not yet called in code. |
 
 _Code-structure edges are `EXTRACTED`; the frontend↔backend HTTP seam and not-yet-implemented reads/writes are flagged `INFERRED`/`AMBIGUOUS` so the next reader knows what was found vs. expected._

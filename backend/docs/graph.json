@@ -1079,32 +1079,27 @@
       {
         "id": "app.main:app",
         "degree": 11,
-        "why": "The FastAPI instance everything flows through: CORS, startup init_db, all four routers, /api/health, and serving the SPA build. Largest blast radius in the repo."
-      },
-      {
-        "id": "app.models",
-        "degree": 6,
-        "why": "Model registry/aggregator: imports all four ORM models so they register on Base.metadata; init_db depends on it. Structural hub of the domain layer."
+        "why": "The FastAPI instance everything flows through: CORS, startup DB init, all four routers, health, and serving the SPA build. Single biggest blast radius."
       },
       {
         "id": "api.client:api",
         "degree": 6,
-        "why": "The only bridge from UI code to the backend; every page data call routes through it over HTTP."
+        "why": "The only bridge from UI code to the backend; every page data call goes through it."
       },
       {
         "id": "frontend.App",
         "degree": 5,
-        "why": "SPA routing hub — the shell and every page hang off it."
-      },
-      {
-        "id": "db.tables:terms",
-        "degree": 5,
-        "why": "Most-connected table: FKs to languages plus the self-referential parent_id, and the read/write target of the terms API."
+        "why": "The SPA routing hub; every page and the shell hang off it."
       },
       {
         "id": "app.database:Base",
         "degree": 5,
         "why": "Declarative base all four models inherit; schema creation depends on it."
+      },
+      {
+        "id": "app.database:get_db",
+        "degree": 4,
+        "why": "Shared session dependency injected into every data router."
       }
     ],
     "surprising_connections": [
