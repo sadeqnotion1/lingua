@@ -13,8 +13,8 @@ Don't start the next one until the current one's acceptance criteria pass.
 - **M4 — Tokenizer** ✅ — implement config-driven parser/tokenizer in `services/parser.py` (Lute-style tokenization).
 - **M5 — Reader** ✅ — word-by-word render + status colors and page navigation.
 - **M6 — Terms** ✅ — status, parent term, translation.
-- **M7 — Account page** — matches screenshot 2. **← NEXT**
-- **M8 — Polish** — stats, search, settings.
+- **M7 — Account page** ✅ — matches screenshot 2. Read-only profile backed by local DB-backed User.
+- **M8 — Polish** — stats, search, settings. **← NEXT**
 
 ## Backlog / maybe-later
 - Audio + sentence playback, dictionary/translation API integration, SRS review

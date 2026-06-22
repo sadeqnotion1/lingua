@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from app.database import SessionLocal, init_db  # noqa: E402
-from app.models import Book, Language, Term, Text  # noqa: E402
+from app.models import Book, Language, Term, Text, User  # noqa: E402
 
 
 def _norm(surface: str) -> str:
@@ -21,6 +21,17 @@ def run() -> None:
     init_db()
     db = SessionLocal()
     try:
+        # M7: ensure the single local user exists (runs even on already-seeded DBs).
+        if db.query(User).first() is None:
+            db.add(
+                User(
+                    username="SadeQ",
+                    email="sadeqnotion1@atomicmail.io",
+                    tier="free",
+                )
+            )
+            db.commit()
+
         if db.query(Language).first():
             print("Already seeded.")
             return

@@ -16,8 +16,8 @@
 | M4 Tokenizer (`services/parser.py`) | ✅ | Lossless, Lute-style alternating runs parser implemented and verified with 22 unit tests. |
 | M5 Reader | ✅ | Word-by-word render + status colors and page navigation complete and verified. |
 | M6 Terms (status, parent, translation) | ✅ | Click-to-define drawer, status selection, translation/parent persistence. Complete & verified. |
-| M7 Account page | ⬜ | Matches screenshot 2. **← NEXT** |
-| M8 Polish (stats, search, settings) | ⬜ | |
+| M7 Account page | ✅ | Matches screenshot 2. Read-only profile backed by local User row. |
+| M8 Polish (stats, search, settings) | ⬜ | **← NEXT** |
 
 ## Open decisions / questions waiting on you
 - **D5 (still open):** keep `.agents/` tracked in the public repo, or re-ignore it?

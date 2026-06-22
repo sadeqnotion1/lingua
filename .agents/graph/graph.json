@@ -1,10 +1,10 @@
 {
   "meta": {
     "repo": "lingua-reader",
-    "generated": "2026-06-22T08:30:00+03:30",
+    "generated": "2026-06-22T09:20:00+03:30",
     "description": "Repo knowledge graph for the LinguaRead scaffold (FastAPI + SQLAlchemy + SQLite backend, React + Vite + TS frontend). Built per the Graphify Protocol.",
-    "node_count": 57,
-    "edge_count": 85
+    "node_count": 61,
+    "edge_count": 91
   },
   "communities": [
     {
@@ -39,7 +39,9 @@
         "db.tables:languages",
         "db.tables:books",
         "db.tables:texts",
-        "db.tables:terms"
+        "db.tables:terms",
+        "app.models.user:User",
+        "db.tables:users"
       ]
     },
     {
@@ -55,7 +57,8 @@
         "app.routers.terms:update_term",
         "app.services.terms",
         "app.routers.account:get_account",
-        "app.services.parser:tokenize"
+        "app.services.parser:tokenize",
+        "app.services.account"
       ]
     },
     {
@@ -80,7 +83,8 @@
         "components.LessonCard",
         "styles.global",
         "components.TermDrawer",
-        "styles.term-drawer"
+        "styles.term-drawer",
+        "styles.account"
       ]
     },
     {
@@ -169,7 +173,7 @@
       "location": "backend/app/database.py:13",
       "summary": "Declarative base every ORM model inherits from.",
       "community": "bootstrap",
-      "degree": 5
+      "degree": 6
     },
     {
       "id": "app.database:engine",
@@ -205,7 +209,7 @@
       "location": "backend/app/database.py:23",
       "summary": "FastAPI dependency yielding a scoped DB session.",
       "community": "bootstrap",
-      "degree": 4
+      "degree": 6
     },
     {
       "id": "app.main",
@@ -223,7 +227,7 @@
       "location": "backend/app/main.py:10",
       "summary": "Central FastAPI instance: CORS, startup init_db, routers, static mount.",
       "community": "bootstrap",
-      "degree": 11
+      "degree": 13
     },
     {
       "id": "app.main:health",
@@ -241,7 +245,7 @@
       "location": "backend/app/models/__init__.py:1",
       "summary": "Aggregates ORM models so they register on Base.metadata.",
       "community": "domain",
-      "degree": 6
+      "degree": 7
     },
     {
       "id": "app.models.language:Language",
@@ -349,7 +353,7 @@
       "location": "backend/app/routers/reading.py:11",
       "summary": "GET /api/reading/text/{id}: tokenized text + term status (stub).",
       "community": "api",
-      "degree": 4
+      "degree": 5
     },
     {
       "id": "app.routers.terms:read_term",
@@ -358,7 +362,7 @@
       "location": "backend/app/routers/terms.py:20",
       "summary": "GET /api/terms/{term_id}: load a term's details.",
       "community": "api",
-      "degree": 3
+      "degree": 4
     },
     {
       "id": "app.routers.terms:create_term",
@@ -367,7 +371,7 @@
       "location": "backend/app/routers/terms.py:29",
       "summary": "POST /api/terms: create a tracked term.",
       "community": "api",
-      "degree": 3
+      "degree": 4
     },
     {
       "id": "app.routers.terms:update_term",
@@ -376,7 +380,7 @@
       "location": "backend/app/routers/terms.py:60",
       "summary": "PUT /api/terms/{term_id}: update status/translation/parent of a term.",
       "community": "api",
-      "degree": 3
+      "degree": 4
     },
     {
       "id": "app.services.terms",
@@ -392,9 +396,9 @@
       "label": "get_account()",
       "type": "endpoint",
       "location": "backend/app/routers/account.py:7",
-      "summary": "GET /api/account: profile/tier (stub).",
+      "summary": "GET /api/account: DB-backed local profile endpoints.",
       "community": "api",
-      "degree": 2
+      "degree": 3
     },
     {
       "id": "app.services.parser:tokenize",
@@ -448,7 +452,7 @@
       "location": "frontend/src/api/client.ts:18",
       "summary": "Typed fetch wrapper hitting /api endpoints.",
       "community": "spa-ui",
-      "degree": 6
+      "degree": 12
     },
     {
       "id": "pages.Library",
@@ -475,7 +479,7 @@
       "location": "frontend/src/components/TermDrawer.tsx:1",
       "summary": "Sliding side drawer for inspecting and editing a single term.",
       "community": "spa-ui",
-      "degree": 4
+      "degree": 3
     },
     {
       "id": "styles.term-drawer",
@@ -493,7 +497,7 @@
       "location": "frontend/src/pages/Account.tsx:1",
       "summary": "Account/settings screen; calls api.getAccount().",
       "community": "spa-ui",
-      "degree": 2
+      "degree": 3
     },
     {
       "id": "components.ShelfRow",
@@ -619,6 +623,42 @@
       "location": "README.md:1",
       "summary": "Front door: quickstart, layout, stack table.",
       "community": "docs",
+      "degree": 1
+    },
+    {
+      "id": "app.models.user:User",
+      "label": "User",
+      "type": "class",
+      "location": "backend/app/models/user.py:19",
+      "summary": "Local user profile model (username, email, tier, member since).",
+      "community": "domain",
+      "degree": 4
+    },
+    {
+      "id": "db.tables:users",
+      "label": "users",
+      "type": "asset",
+      "location": "backend/app/models/user.py:20",
+      "summary": "Users table in SQLite db.",
+      "community": "domain",
+      "degree": 1
+    },
+    {
+      "id": "app.services.account",
+      "label": "app.services.account",
+      "type": "module",
+      "location": "backend/app/services/account.py:1",
+      "summary": "Account service logic (retrieve/serialize local user).",
+      "community": "api",
+      "degree": 2
+    },
+    {
+      "id": "styles.account",
+      "label": "account.css",
+      "type": "file",
+      "location": "frontend/src/styles/account.css:1",
+      "summary": "Dark, glassmorphic styling for Account screen.",
+      "community": "spa-ui",
       "degree": 1
     }
   ],
@@ -959,7 +999,6 @@
       "confidence": "INFERRED",
       "evidence": "get_text(text_id) returns a text page; will read texts table."
     },
-
     {
       "source": "app.routers.reading:get_text",
       "target": "app.services.parser:tokenize",
@@ -1218,6 +1257,48 @@
       "type": "explains",
       "confidence": "EXTRACTED",
       "evidence": "Quickstart documents ./run.sh and run.bat (README.md)"
+    },
+    {
+      "source": "app.models.user:User",
+      "target": "db.tables:users",
+      "type": "contains",
+      "confidence": "EXTRACTED",
+      "evidence": "__tablename__ = 'users'"
+    },
+    {
+      "source": "app.models.user:User",
+      "target": "app.database:Base",
+      "type": "depends_on",
+      "confidence": "EXTRACTED",
+      "evidence": "class User(Base)"
+    },
+    {
+      "source": "app.models",
+      "target": "app.models.user:User",
+      "type": "contains",
+      "confidence": "EXTRACTED",
+      "evidence": "from app.models.user import User (__init__.py)"
+    },
+    {
+      "source": "app.services.account",
+      "target": "app.models.user:User",
+      "type": "imports",
+      "confidence": "EXTRACTED",
+      "evidence": "from app.models.user import User"
+    },
+    {
+      "source": "app.routers.account:get_account",
+      "target": "app.services.account",
+      "type": "calls",
+      "confidence": "EXTRACTED",
+      "evidence": "service.get_account(db)"
+    },
+    {
+      "source": "pages.Account",
+      "target": "styles.account",
+      "type": "imports",
+      "confidence": "EXTRACTED",
+      "evidence": "import '../styles/account.css'"
     }
   ],
   "insights": {
@@ -1254,14 +1335,14 @@
           "frontend.vite",
           "app.main:app"
         ],
-        "why": "A frontend build/config file hard-codes the backend's host:port (127.0.0.1:8000) for its dev proxy — a tooling node reaching across into backend runtime."
+        "why": "A frontend build/config file hard-codes the backend's host:port (127.0.0.1:8000) for its dev proxy \u2014 a tooling node reaching across into backend runtime."
       },
       {
         "edge": [
           "app.main:app",
           "frontend.vite"
         ],
-        "why": "The backend serves frontend/dist (Vite's build output), so backend runtime depends on a frontend artifact — a circular cross-layer coupling with the proxy edge."
+        "why": "The backend serves frontend/dist (Vite's build output), so backend runtime depends on a frontend artifact \u2014 a circular cross-layer coupling with the proxy edge."
       },
       {
         "edge": [

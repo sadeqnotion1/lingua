@@ -1,6 +1,16 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-22 — M7 Account page ✅ (wrap-up)
+- Completed **M7 — Account page** by applying the package from `.agents/fixes/8566222026`.
+  - Copied new backend files: `backend/app/models/user.py` (User model with table `users`), `backend/app/schemas/account.py` (AccountOut schema), and `backend/app/services/account.py` (Account service layer with `get_account` and `serialize_account`).
+  - Added new unit test suite: `backend/tests/test_account.py` (in-memory SQLite session with 3 new test cases verified).
+  - Replaced router/page stubs: `backend/app/models/__init__.py` (added User to the model registry), `backend/app/routers/account.py` (DB-backed account endpoints querying the seeded User), and `frontend/src/pages/Account.tsx` (read-only profile UI showing username, email, plan tier, and member-since date).
+  - Created frontend styles: `frontend/src/styles/account.css` matching the dark/glassmorphic aesthetics.
+  - Edited `backend/tools/seed.py` to import `User` and idempotently seed the single local user (`SadeQ`).
+  - Verified: All 105 python backend tests passed successfully with no regressions, and the frontend compiles cleanly.
+- **Stop point:** M7 Account complete. Next chat targets **M8 — Polish (stats, search, settings)**.
+
 ## 2026-06-22 — M6 Terms ✅ (wrap-up)
 - Completed **M6 — Terms** by implementing interactive click-to-define drawer panels.
   - Copied new backend files: `backend/app/schemas/term.py` (TermOut, TermCreate, TermUpdate schemas) and `backend/app/services/terms.py` (Term business logic: create/update terms, case-insensitive normalization).
