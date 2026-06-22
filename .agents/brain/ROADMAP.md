@@ -14,9 +14,10 @@ Don't start the next one until the current one's acceptance criteria pass.
 - **M5 — Reader** ✅ — word-by-word render + status colors and page navigation.
 - **M6 — Terms** ✅ — status, parent term, translation.
 - **M7 — Account page** ✅ — matches screenshot 2. Read-only profile backed by local DB-backed User.
-- **M8 — Polish** ✅ — stats, search, settings.
+- **M8 — Polish** ✅ **verified** — stats, search, settings. Live smoke-test passed 2026-06-22 (uvicorn+vite).
+- **M9 — TBD** ⏳ — **pick from Backlog** (front-runner: SQLite FTS5 search-at-scale). Scope via PLAYBOOK feature-intake before building. See NEXT.md.
 
 ## Backlog / maybe-later
-- [ ] Search at scale: migrate global search to SQLite FTS5 (virtual table + sync triggers) when libraries grow large.
+- [ ] Search at scale: migrate global search to SQLite FTS5 (virtual table + sync triggers) when libraries grow large. **← M9 front-runner**
 - Audio + sentence playback, dictionary/translation API integration, SRS review
   queue, export of known terms, multi-user/auth, deployment packaging.

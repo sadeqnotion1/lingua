@@ -1,6 +1,19 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-22 — M8 smoke-test verified ✅ + housekeeping (wrap-up)
+- Live smoke-test of M8 on local machine (uvicorn + vite): **all acceptance criteria PASS**.
+  - `/dashboard`, `/search`, `/settings` load.
+  - Dashboard totals correct (1 lang / 1 book / 2 pages / 21 words / 5 terms) + vocab status bar/legend.
+  - Search query "sample" → 3 hits across Books/Pages/Terms; Page hit deep-links to `/read/1`.
+  - Settings: profile edit saves; theme (dark/light/system) + accent apply instantly; per-language `word_chars`/RTL/romanization persist.
+  - `app_settings` table (columns `key`, `value`) auto-created on boot via `init_db`.
+- Housekeeping resolved:
+  - `agents.md` 404 → canonical orientation file is uppercase `.agents/AGENTS.md` (lowercase 404s on case-sensitive GitHub/Linux). Logged as **D14**; boot sequence uses `AGENTS.md`.
+  - D5 → keep `.agents/` **tracked** in public repo (Option A), no secrets ever committed. Logged as **D13**.
+- **No code changes this session (verification only)** → `graph.json` / `graph.html` unchanged.
+- **Stop point:** M0–M8 complete & verified; no active milestone. Next chat selects + scopes **M9** from Backlog (front-runner: SQLite FTS5 search). See NEXT.md.
+
 ## 2026-06-22 — M8 Polish minor-findings fixes ✅
 - Perf: memoized dashboard word counts (content fingerprint, never stale); removed search N+1 (grouped page-count + IN-batched parent books).
 - Search race guard: AbortController + request-id in Search.tsx.

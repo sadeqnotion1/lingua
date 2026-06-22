@@ -12,13 +12,8 @@
   `Term.parent_id`, numeric `status` (0-99 familiarity).
 - **D5 — `.agents/` location.** Holds `agent.md`, the knowledge graph (`.agents/graph/`),
   and this brain (`.agents/brain/`).
-  ⚠️ **NEEDS A DECISION:** originally declared "gitignored, local-only, not committed" —
-  but the folder is currently committed to the public repo (that's how a fresh chat can
-  pull it from GitHub). Pick ONE and update this line:
-    - **(a) Keep it tracked** — chats pull context straight from the repo. Make sure no
-      secrets ever land in `.agents/`.
-    - **(b) Re-ignore it** — add `.agents/` back to `.gitignore` and `git rm -r --cached .agents`;
-      then context must be attached/pasted each chat.
+  ✅ **RESOLVED (see D13):** keep it **tracked** in the public repo (Option a) so fresh
+  chats can pull context straight from GitHub. Never commit secrets into `.agents/`.
 - **D6 — Terms are case-insensitive.** A term's identity is `(language_id, text_lower)`;
   "The" and "the" are the same term. Enforced at the DB level by `UniqueConstraint
   uq_term_lang_lower`; `seed.py` (and future ingest) must set `text_lower = text.lower()`.
@@ -32,5 +27,7 @@
 - **D10 (M8) — Dashboard is the landing route.** `/` redirects to `/dashboard`; unknown routes also redirect there. Library remains at `/library`.
 - **D11 (M8) — Settings preferences stored in a new `app_settings` key/value table.** The Setting model is used rather than widening the single-row User. Theme + accent are persisted server-side AND in localStorage (instant apply, no theme flash). Settings that are not supported (e.g. password, billing, billing plans) are clearly labeled as "Not available in this build" rather than being faked.
 - **D12 (M8) — Dashboard word counts are memoized.** Counts are memoized per-text using a content fingerprint (MD5 hash of word_chars + content). The cache invalidates automatically if the text's contents or the language's word characters change. Full-text search via SQLite FTS5 is deferred until the library size warrants virtual table schema migrations.
+- **D13 — `.agents/` stays tracked in the public repo (resolves D5 → option a).** Fresh chats pull full context directly from GitHub commits, keeping cold-starts seamless. Hard rule: never commit secrets, tokens, or personal API keys into `.agents/`. (Session 2026-06-22.)
+- **D14 — Canonical orientation filename is uppercase `.agents/AGENTS.md`.** The lowercase `.agents/agents.md` returns 404 on case-sensitive hosts (GitHub/Linux), which broke cold-start fetches. The boot sequence and START prompt must reference `AGENTS.md`. (Session 2026-06-22.)
 
 ---
