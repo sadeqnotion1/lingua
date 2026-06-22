@@ -1,6 +1,17 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-22 — M6 Terms ✅ (wrap-up)
+- Completed **M6 — Terms** by implementing interactive click-to-define drawer panels.
+  - Copied new backend files: `backend/app/schemas/term.py` (TermOut, TermCreate, TermUpdate schemas) and `backend/app/services/terms.py` (Term business logic: create/update terms, case-insensitive normalization).
+  - Replaced router/page stubs: `backend/app/routers/terms.py` (endpoints for loading details, creating, and updating terms) and `frontend/src/pages/Reader.tsx` (fully wired word token selection, dynamic token status coloring, and TermDrawer mounting).
+  - Created new frontend files: `frontend/src/components/TermDrawer.tsx` (sliding drawer component for inspecting/editing terms, picking familiarity status, defining translations, and linking parent terms) and `frontend/src/styles/term-drawer.css` (dark, glassmorphic styling matching spec).
+  - Merged additions to `frontend/src/api/client.ts` containing new interfaces (`Term`, `TermCreate`, `TermUpdate`) and API endpoints (`getTerm`, `createTerm`, `updateTerm`).
+  - Added new backend service test suite in `backend/tests/test_terms.py` (13 test cases verified).
+  - Verified: All 102 python backend tests passed successfully with no regressions, and frontend compiled with TypeScript checking passing cleanly.
+  - Updated the knowledge graph `backend/docs/graph.json` to index the new endpoints, service logic, and frontend components, and regenerated `backend/docs/graph.html`.
+- **Stop point:** M6 Terms complete. Next chat targets **M7 — Account page**.
+
 ## 2026-06-22 — M5 Reader ✅ (wrap-up)
 - Completed **M5 — Reader** by applying the server-enriched reading screen and client view.
   - Copied new backend files: `backend/app/schemas/reading.py`, `backend/app/services/reading.py`, and `backend/tests/test_reading.py`.

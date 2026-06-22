@@ -98,6 +98,33 @@ export interface ReaderText {
 	tokens: ReaderToken[]
 }
 
+/** A tracked term (mirrors backend TermOut). */
+export interface Term {
+	id: number
+	text: string
+	text_lower: string
+	translation: string | null
+	status: number
+	parent_id: number | null
+	language_id: number | null
+}
+
+/** Payload for POST /api/terms (create a brand-new term). */
+export interface TermCreate {
+	text: string
+	language_id: number
+	translation?: string | null
+	status?: number
+	parent_id?: number | null
+}
+
+/** Payload for PUT /api/terms/{id} (partial update of an existing term). */
+export interface TermUpdate {
+	translation?: string | null
+	status?: number | null
+	parent_id?: number | null
+}
+
 export const api = {
 	health: () => request<{ status: string }>("/health"),
 	listBooks: () => request<LanguageGroup[]>("/library/books"),
@@ -108,6 +135,18 @@ export const api = {
 		}),
 	getReaderText: (textId: number) =>
 		request<ReaderText>(`/reading/text/${textId}`),
+	// M6 — Terms. Separate create/update endpoints (no upsert).
+	getTerm: (termId: number) => request<Term>(`/terms/${termId}`),
+	createTerm: (payload: TermCreate) =>
+		request<Term>("/terms", {
+			method: "POST",
+			body: JSON.stringify(payload),
+		}),
+	updateTerm: (termId: number, payload: TermUpdate) =>
+		request<Term>(`/terms/${termId}`, {
+			method: "PUT",
+			body: JSON.stringify(payload),
+		}),
 	getAccount: () => request<Account>("/account"),
 }
 

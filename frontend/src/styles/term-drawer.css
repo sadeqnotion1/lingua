@@ -1,0 +1,259 @@
+/* TermDrawer (M6) — sliding side panel.
+ * Self-contained + scoped under .tdrawer so it never collides with reader.css.
+ * Dark, glassmorphism, motion-driven; honours prefers-reduced-motion and keeps
+ * visible focus rings + AA contrast (Delivery Standard §6).
+ */
+
+.tdrawer,
+.tdrawer-scrim {
+	--tdrawer-ink: #0a0a14;
+	--tdrawer-panel: rgba(20, 22, 38, 0.82);
+	--tdrawer-border: rgba(255, 255, 255, 0.1);
+	--tdrawer-text: #e8e9f3;
+	--tdrawer-muted: #a4a7c4;
+	--tdrawer-violet: #8b5cf6;
+	--tdrawer-cyan: #06b6d4;
+	--tdrawer-green: #22c55e;
+	--tdrawer-radius: 14px;
+}
+
+/* Backdrop */
+.tdrawer-scrim {
+	position: fixed;
+	inset: 0;
+	background: rgba(5, 6, 14, 0.46);
+	backdrop-filter: blur(2px);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 220ms ease;
+	z-index: 40;
+}
+.tdrawer-scrim.is-open {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+/* Panel */
+.tdrawer {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: min(380px, 92vw);
+	background: var(--tdrawer-panel);
+	backdrop-filter: blur(18px) saturate(140%);
+	-webkit-backdrop-filter: blur(18px) saturate(140%);
+	border-left: 1px solid var(--tdrawer-border);
+	box-shadow: -24px 0 60px rgba(0, 0, 0, 0.4);
+	color: var(--tdrawer-text);
+	transform: translateX(100%);
+	transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+	z-index: 41;
+	overflow-y: auto;
+}
+.tdrawer.is-open {
+	transform: translateX(0);
+}
+
+.tdrawer-inner {
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+	padding: 22px 22px 28px;
+}
+
+/* Header */
+.tdrawer-head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+.tdrawer-kicker {
+	margin: 0 0 2px;
+	font-size: 0.72rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--tdrawer-muted);
+}
+.tdrawer-word {
+	margin: 0;
+	font-size: 1.5rem;
+	line-height: 1.15;
+	font-weight: 650;
+	word-break: break-word;
+}
+.tdrawer-close {
+	flex: none;
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 10px;
+	border: 1px solid var(--tdrawer-border);
+	background: transparent;
+	color: var(--tdrawer-muted);
+	cursor: pointer;
+	transition: background 160ms ease, color 160ms ease;
+}
+.tdrawer-close:hover {
+	background: rgba(255, 255, 255, 0.06);
+	color: var(--tdrawer-text);
+}
+
+/* Fields */
+.tdrawer-field {
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+}
+.tdrawer-label {
+	font-size: 0.8rem;
+	font-weight: 560;
+	color: var(--tdrawer-muted);
+}
+.tdrawer-input {
+	width: 100%;
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid var(--tdrawer-border);
+	background: rgba(10, 10, 20, 0.55);
+	color: var(--tdrawer-text);
+	font-size: 0.95rem;
+	transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.tdrawer-input::placeholder {
+	color: rgba(164, 167, 196, 0.6);
+}
+
+/* Level picker */
+.tdrawer-levels {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 8px;
+}
+.tdrawer-level {
+	position: relative;
+	height: 42px;
+	border-radius: 10px;
+	border: 1px solid var(--tdrawer-border);
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--tdrawer-text);
+	font-weight: 600;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: transform 150ms ease, background 160ms ease,
+		border-color 160ms ease;
+}
+.tdrawer-level:hover:not(:disabled) {
+	transform: translateY(-1px);
+	background: rgba(255, 255, 255, 0.08);
+}
+.tdrawer-level.is-active {
+	border-color: transparent;
+	color: #0a0a14;
+}
+/* Learning gradient 1->5 (warm to cool), level 5 = known/green. */
+.tdrawer-l1.is-active { background: #f0a868; }
+.tdrawer-l2.is-active { background: #ecc36b; }
+.tdrawer-l3.is-active { background: #d8d873; }
+.tdrawer-l4.is-active { background: #a7d585; }
+.tdrawer-l5.is-active { background: var(--tdrawer-green); }
+
+.tdrawer-flags {
+	display: flex;
+	gap: 8px;
+}
+.tdrawer-flag {
+	flex: 1;
+	height: 38px;
+	border-radius: 10px;
+	border: 1px solid var(--tdrawer-border);
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--tdrawer-muted);
+	font-weight: 560;
+	cursor: pointer;
+	transition: background 160ms ease, color 160ms ease;
+}
+.tdrawer-flag:hover:not(:disabled) {
+	background: rgba(255, 255, 255, 0.08);
+	color: var(--tdrawer-text);
+}
+.tdrawer-flag.is-active {
+	background: rgba(139, 92, 246, 0.22);
+	border-color: rgba(139, 92, 246, 0.5);
+	color: var(--tdrawer-text);
+}
+
+/* Actions */
+.tdrawer-actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 4px;
+}
+.tdrawer-btn {
+	flex: 1;
+	height: 44px;
+	border-radius: 11px;
+	border: 1px solid transparent;
+	font-weight: 620;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: transform 150ms ease, filter 160ms ease, background 160ms ease;
+}
+.tdrawer-btn:disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+.tdrawer-btn--ghost {
+	background: transparent;
+	border-color: var(--tdrawer-border);
+	color: var(--tdrawer-text);
+}
+.tdrawer-btn--ghost:hover:not(:disabled) {
+	background: rgba(255, 255, 255, 0.06);
+}
+.tdrawer-btn--primary {
+	background: linear-gradient(135deg, var(--tdrawer-violet), var(--tdrawer-cyan));
+	color: #fff;
+}
+.tdrawer-btn--primary:hover:not(:disabled) {
+	transform: translateY(-1px);
+	filter: brightness(1.06);
+}
+
+.tdrawer-error {
+	margin: 0;
+	padding: 10px 12px;
+	border-radius: 10px;
+	background: rgba(239, 68, 68, 0.14);
+	border: 1px solid rgba(239, 68, 68, 0.4);
+	color: #fca5a5;
+	font-size: 0.86rem;
+}
+
+/* Make reader word tokens feel clickable without editing reader.css. */
+.rdr-word[role="button"] {
+	cursor: pointer;
+}
+
+/* Shared, accessible focus ring for everything interactive in the drawer. */
+.tdrawer :focus-visible,
+.rdr-word[role="button"]:focus-visible {
+	outline: 2px solid var(--tdrawer-cyan, #06b6d4);
+	outline-offset: 2px;
+	border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.tdrawer,
+	.tdrawer-scrim,
+	.tdrawer-level,
+	.tdrawer-btn {
+		transition: none;
+	}
+	.tdrawer-level:hover,
+	.tdrawer-btn--primary:hover {
+		transform: none;
+	}
+}

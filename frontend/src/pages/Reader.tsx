@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { api, ApiError, type ReaderText, type ReaderToken } from "../api/client"
+import TermDrawer, {
+	type DrawerWord,
+	type SavedTerm,
+} from "../components/TermDrawer"
 import "../styles/reader.css"
 
-// Reader screen (M5) — renders a text word-by-word from the server-enriched
-// endpoint GET /api/reading/text/:id. Each word token already carries its term
-// status, so this view only renders + colors. Click-to-define lands in M6.
+// Reader screen — renders a text word-by-word from the server-enriched endpoint
+// GET /api/reading/text/:id. Each word token already carries its term status.
+// M6: clicking a word opens the TermDrawer; saving recolors every matching
+// token live (no full reload).
 
 type LoadState = "loading" | "ready" | "error" | "missing"
 
@@ -34,6 +39,7 @@ export default function Reader() {
 
 	const [data, setData] = useState<ReaderText | null>(null)
 	const [state, setState] = useState<LoadState>("loading")
+	const [selected, setSelected] = useState<DrawerWord | null>(null)
 
 	useEffect(() => {
 		let alive = true
@@ -59,6 +65,33 @@ export default function Reader() {
 			alive = false
 		}
 	}, [id])
+
+	// Apply a saved term to every matching word token so the colour updates live.
+	// Terms are case-insensitive within a language (D6), so we match on the
+	// normalized surface form and refresh both status and term_id.
+	function applySaved(saved: SavedTerm) {
+		setData((prev) => {
+			if (!prev) return prev
+			return {
+				...prev,
+				tokens: prev.tokens.map((t) =>
+					t.is_word && t.text.toLowerCase() === saved.text_lower
+						? { ...t, status: saved.status, term_id: saved.term_id }
+						: t,
+				),
+			}
+		})
+	}
+
+	function openWord(tok: ReaderToken) {
+		if (!data) return
+		setSelected({
+			text: tok.text,
+			status: tok.status,
+			termId: tok.term_id,
+			languageId: data.language.id,
+		})
+	}
 
 	return (
 		<div className="reader-m5">
@@ -116,7 +149,11 @@ export default function Reader() {
 						) : (
 							<p className="rdr-flow">
 								{data.tokens.map((tok, i) => (
-									<Token key={i} tok={tok} />
+									<Token
+										key={i}
+										tok={tok}
+										onSelect={() => openWord(tok)}
+									/>
 								))}
 							</p>
 						)}
@@ -138,17 +175,41 @@ export default function Reader() {
 					</nav>
 				</>
 			)}
+
+			<TermDrawer
+				word={selected}
+				onClose={() => setSelected(null)}
+				onSaved={applySaved}
+			/>
 		</div>
 	)
 }
 
-function Token({ tok }: { tok: ReaderToken }) {
+function Token({
+	tok,
+	onSelect,
+}: {
+	tok: ReaderToken
+	onSelect?: () => void
+}) {
 	if (!tok.is_word) {
 		// Preserve spaces/punctuation/newlines exactly (container is pre-wrap).
 		return <span className="rdr-punct">{tok.text}</span>
 	}
 	return (
-		<span className={wordClass(tok.status)} title={statusLabel(tok.status)}>
+		<span
+			className={wordClass(tok.status)}
+			title={statusLabel(tok.status)}
+			role="button"
+			tabIndex={0}
+			onClick={onSelect}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault()
+					onSelect?.()
+				}
+			}}
+		>
 			{tok.text}
 		</span>
 	)
@@ -197,6 +258,7 @@ function Legend() {
 	)
 }
 
+// Keep line skeleton width varied for realistic-looking load block.
 function ReaderSkeleton() {
 	return (
 		<div className="rdr-page rdr-skel" aria-hidden="true">

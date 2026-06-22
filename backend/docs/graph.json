@@ -1,10 +1,10 @@
 {
   "meta": {
     "repo": "lingua-reader",
-    "generated": "2026-06-21T11:00:00+03:30",
+    "generated": "2026-06-22T08:30:00+03:30",
     "description": "Repo knowledge graph for the LinguaRead scaffold (FastAPI + SQLAlchemy + SQLite backend, React + Vite + TS frontend). Built per the Graphify Protocol.",
-    "node_count": 53,
-    "edge_count": 70
+    "node_count": 57,
+    "edge_count": 85
   },
   "communities": [
     {
@@ -50,8 +50,10 @@
         "app.routers.library:list_books",
         "app.routers.library:import_text",
         "app.routers.reading:get_text",
-        "app.routers.terms:list_terms",
-        "app.routers.terms:upsert_term",
+        "app.routers.terms:read_term",
+        "app.routers.terms:create_term",
+        "app.routers.terms:update_term",
+        "app.services.terms",
         "app.routers.account:get_account",
         "app.services.parser:tokenize"
       ]
@@ -76,7 +78,9 @@
         "pages.Account",
         "components.ShelfRow",
         "components.LessonCard",
-        "styles.global"
+        "styles.global",
+        "components.TermDrawer",
+        "styles.term-drawer"
       ]
     },
     {
@@ -348,22 +352,40 @@
       "degree": 4
     },
     {
-      "id": "app.routers.terms:list_terms",
-      "label": "list_terms()",
+      "id": "app.routers.terms:read_term",
+      "label": "read_term()",
       "type": "endpoint",
-      "location": "backend/app/routers/terms.py:11",
-      "summary": "GET /api/terms (stub).",
+      "location": "backend/app/routers/terms.py:20",
+      "summary": "GET /api/terms/{term_id}: load a term's details.",
       "community": "api",
-      "degree": 2
+      "degree": 3
     },
     {
-      "id": "app.routers.terms:upsert_term",
-      "label": "upsert_term()",
+      "id": "app.routers.terms:create_term",
+      "label": "create_term()",
       "type": "endpoint",
-      "location": "backend/app/routers/terms.py:17",
-      "summary": "POST /api/terms: create/update term + status (stub).",
+      "location": "backend/app/routers/terms.py:29",
+      "summary": "POST /api/terms: create a tracked term.",
       "community": "api",
-      "degree": 1
+      "degree": 3
+    },
+    {
+      "id": "app.routers.terms:update_term",
+      "label": "update_term()",
+      "type": "endpoint",
+      "location": "backend/app/routers/terms.py:60",
+      "summary": "PUT /api/terms/{term_id}: update status/translation/parent of a term.",
+      "community": "api",
+      "degree": 3
+    },
+    {
+      "id": "app.services.terms",
+      "label": "app.services.terms",
+      "type": "module",
+      "location": "backend/app/services/terms.py:1",
+      "summary": "Term business logic: create/update terms, case-insensitive normalization.",
+      "community": "api",
+      "degree": 4
     },
     {
       "id": "app.routers.account:get_account",
@@ -442,7 +464,25 @@
       "label": "Reader.tsx",
       "type": "file",
       "location": "frontend/src/pages/Reader.tsx:1",
-      "summary": "Reader screen for word-by-word click-to-define (stub).",
+      "summary": "Reader screen: renders text word-by-word with status colors and page navigation; click opens TermDrawer.",
+      "community": "spa-ui",
+      "degree": 3
+    },
+    {
+      "id": "components.TermDrawer",
+      "label": "TermDrawer.tsx",
+      "type": "file",
+      "location": "frontend/src/components/TermDrawer.tsx:1",
+      "summary": "Sliding side drawer for inspecting and editing a single term.",
+      "community": "spa-ui",
+      "degree": 4
+    },
+    {
+      "id": "styles.term-drawer",
+      "label": "term-drawer.css",
+      "type": "file",
+      "location": "frontend/src/styles/term-drawer.css:1",
+      "summary": "Dark, glassmorphic styling for TermDrawer.",
       "community": "spa-ui",
       "degree": 1
     },
@@ -648,7 +688,21 @@
     },
     {
       "source": "app.main:app",
-      "target": "app.routers.terms:list_terms",
+      "target": "app.routers.terms:read_term",
+      "type": "references",
+      "confidence": "EXTRACTED",
+      "evidence": "app.include_router(terms.router, prefix='/api')"
+    },
+    {
+      "source": "app.main:app",
+      "target": "app.routers.terms:create_term",
+      "type": "references",
+      "confidence": "EXTRACTED",
+      "evidence": "app.include_router(terms.router, prefix='/api')"
+    },
+    {
+      "source": "app.main:app",
+      "target": "app.routers.terms:update_term",
       "type": "references",
       "confidence": "EXTRACTED",
       "evidence": "app.include_router(terms.router, prefix='/api')"
@@ -843,11 +897,53 @@
       "evidence": "Depends(get_db) (reading.py:11)"
     },
     {
-      "source": "app.routers.terms:list_terms",
+      "source": "app.routers.terms:read_term",
       "target": "app.database:get_db",
       "type": "depends_on",
       "confidence": "EXTRACTED",
-      "evidence": "Depends(get_db) (terms.py:11)"
+      "evidence": "Depends(get_db) (terms.py:21)"
+    },
+    {
+      "source": "app.routers.terms:create_term",
+      "target": "app.database:get_db",
+      "type": "depends_on",
+      "confidence": "EXTRACTED",
+      "evidence": "Depends(get_db) (terms.py:30)"
+    },
+    {
+      "source": "app.routers.terms:update_term",
+      "target": "app.database:get_db",
+      "type": "depends_on",
+      "confidence": "EXTRACTED",
+      "evidence": "Depends(get_db) (terms.py:61)"
+    },
+    {
+      "source": "app.routers.terms:read_term",
+      "target": "app.services.terms",
+      "type": "calls",
+      "confidence": "EXTRACTED",
+      "evidence": "service.get_term() (terms.py:24)"
+    },
+    {
+      "source": "app.routers.terms:create_term",
+      "target": "app.services.terms",
+      "type": "calls",
+      "confidence": "EXTRACTED",
+      "evidence": "service.create_term() (terms.py:33)"
+    },
+    {
+      "source": "app.routers.terms:update_term",
+      "target": "app.services.terms",
+      "type": "calls",
+      "confidence": "EXTRACTED",
+      "evidence": "service.update_term() (terms.py:68)"
+    },
+    {
+      "source": "app.services.terms",
+      "target": "db.tables:terms",
+      "type": "writes",
+      "confidence": "EXTRACTED",
+      "evidence": "writes to and updates Term model instances (terms.py)"
     },
     {
       "source": "app.routers.library:list_books",
@@ -863,13 +959,7 @@
       "confidence": "INFERRED",
       "evidence": "get_text(text_id) returns a text page; will read texts table."
     },
-    {
-      "source": "app.routers.terms:upsert_term",
-      "target": "db.tables:terms",
-      "type": "writes",
-      "confidence": "INFERRED",
-      "evidence": "upsert_term creates/updates a term; will write terms table."
-    },
+
     {
       "source": "app.routers.reading:get_text",
       "target": "app.services.parser:tokenize",
@@ -1009,6 +1099,62 @@
       "type": "references",
       "confidence": "INFERRED",
       "evidence": "fetch('/api/health') maps to health endpoint (client.ts)."
+    },
+    {
+      "source": "api.client:api",
+      "target": "app.routers.reading:get_text",
+      "type": "references",
+      "confidence": "INFERRED",
+      "evidence": "fetch('/api/reading/text/{id}') maps to get_text endpoint (client.ts)."
+    },
+    {
+      "source": "api.client:api",
+      "target": "app.routers.terms:read_term",
+      "type": "references",
+      "confidence": "INFERRED",
+      "evidence": "fetch('/api/terms/{id}') maps to read_term endpoint (client.ts)."
+    },
+    {
+      "source": "api.client:api",
+      "target": "app.routers.terms:create_term",
+      "type": "references",
+      "confidence": "INFERRED",
+      "evidence": "fetch('/api/terms', POST) maps to create_term endpoint (client.ts)."
+    },
+    {
+      "source": "api.client:api",
+      "target": "app.routers.terms:update_term",
+      "type": "references",
+      "confidence": "INFERRED",
+      "evidence": "fetch('/api/terms/{id}', PUT) maps to update_term endpoint (client.ts)."
+    },
+    {
+      "source": "pages.Reader",
+      "target": "api.client:api",
+      "type": "calls",
+      "confidence": "EXTRACTED",
+      "evidence": "api.getReaderText() (Reader.tsx)"
+    },
+    {
+      "source": "pages.Reader",
+      "target": "components.TermDrawer",
+      "type": "imports",
+      "confidence": "EXTRACTED",
+      "evidence": "import TermDrawer from '../components/TermDrawer' (Reader.tsx)"
+    },
+    {
+      "source": "components.TermDrawer",
+      "target": "api.client:api",
+      "type": "calls",
+      "confidence": "EXTRACTED",
+      "evidence": "api.getTerm(), api.createTerm(), api.updateTerm() (TermDrawer.tsx)"
+    },
+    {
+      "source": "components.TermDrawer",
+      "target": "styles.term-drawer",
+      "type": "references",
+      "confidence": "EXTRACTED",
+      "evidence": "import '../styles/term-drawer.css' (TermDrawer.tsx)"
     },
     {
       "source": "run.sh",
