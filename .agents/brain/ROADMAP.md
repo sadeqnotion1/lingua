@@ -12,8 +12,8 @@ Don't start the next one until the current one's acceptance criteria pass.
 - **M3 — Library UI** ✅ — shelves + search/import bar (matches screenshot 1). Polished with hover zoom and clean focus rings.
 - **M4 — Tokenizer** ✅ — implement config-driven parser/tokenizer in `services/parser.py` (Lute-style tokenization).
 - **M5 — Reader** ✅ — word-by-word render + status colors and page navigation.
-- **M6 — Terms** — status, parent term, translation. **← NEXT**
-- **M7 — Account page** — matches screenshot 2.
+- **M6 — Terms** ✅ — status, parent term, translation.
+- **M7 — Account page** — matches screenshot 2. **← NEXT**
 - **M8 — Polish** — stats, search, settings.
 
 ## Backlog / maybe-later
