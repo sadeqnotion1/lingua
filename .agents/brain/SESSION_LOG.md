@@ -1,6 +1,17 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-22 — M5 Reader ✅ (wrap-up)
+- Completed **M5 — Reader** by applying the server-enriched reading screen and client view.
+  - Copied new backend files: `backend/app/schemas/reading.py`, `backend/app/services/reading.py`, and `backend/tests/test_reading.py`.
+  - Copied new frontend stylesheet: `frontend/src/styles/reader.css`.
+  - Replaced router/page stubs: `backend/app/routers/reading.py` (serves tokenized text + term status) and `frontend/src/pages/Reader.tsx` (word-by-word reader view with Claude-style status colors, legend, skeleton loader, pagination, and RTL language support).
+  - Merged additions to `frontend/src/api/client.ts` with new interfaces (`ReaderToken`, `ReaderLanguage`, `ReaderPagination`, `ReaderText`) and the `getReaderText` API client method.
+- Fixed path resolution in `.agents/graph/build_graph_html.py` to point to `backend/docs` relative to the repository root.
+- Verified: Both frontend production builds compiled without TypeScript/bundler errors, and Python backend tests pass (89 passed, including the new integration tests in `test_reading.py`).
+- Regenerated graph representation `backend/docs/graph.html` using the fixed builder.
+- **Stop point:** M5 Reader complete. Next chat targets **M6 — Terms**.
+
 ## 2026-06-21 — M4 Tokenizer & M3 Design Polish ✅ (wrap-up)
 - Completed **M4 — Tokenizer** by applying the config-driven parser/tokenizer.
   - `backend/app/services/parser.py`: Implemented Lute-style parser/tokenizer splitting text into lossless alternating runs of word/non-word strings, matching language config rules.

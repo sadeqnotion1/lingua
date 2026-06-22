@@ -65,6 +65,39 @@ export interface ImportResponse {
 	created: boolean
 }
 
+/** One lossless token of a text (mirrors backend TokenOut). `status` is the
+ *  matched term familiarity for word tokens, or null for a brand-new word. */
+export interface ReaderToken {
+	text: string
+	is_word: boolean
+	status: number | null
+	term_id: number | null
+}
+
+export interface ReaderLanguage {
+	id: number | null
+	name: string | null
+	right_to_left: boolean
+}
+
+export interface ReaderPagination {
+	page_number: number
+	page_count: number
+	prev_text_id: number | null
+	next_text_id: number | null
+}
+
+/** Everything the reader needs to render one text/page (mirrors backend ReaderText). */
+export interface ReaderText {
+	text_id: number
+	title: string | null
+	book_id: number | null
+	book_title: string | null
+	language: ReaderLanguage
+	pagination: ReaderPagination
+	tokens: ReaderToken[]
+}
+
 export const api = {
 	health: () => request<{ status: string }>("/health"),
 	listBooks: () => request<LanguageGroup[]>("/library/books"),
@@ -73,6 +106,8 @@ export const api = {
 			method: "POST",
 			body: JSON.stringify(payload),
 		}),
+	getReaderText: (textId: number) =>
+		request<ReaderText>(`/reading/text/${textId}`),
 	getAccount: () => request<Account>("/account"),
 }
 

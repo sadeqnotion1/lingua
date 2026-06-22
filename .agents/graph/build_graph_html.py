@@ -8,7 +8,7 @@ community, click a node for details, search/filter. Run after updating the graph
 import json
 from pathlib import Path
 
-DOCS = Path(__file__).resolve().parents[1] / "docs"
+DOCS = Path(__file__).resolve().parents[2] / "backend" / "docs"
 GRAPH_JSON = DOCS / "graph.json"
 GRAPH_HTML = DOCS / "graph.html"
 

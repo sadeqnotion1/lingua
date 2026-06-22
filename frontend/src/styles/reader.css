@@ -1,0 +1,297 @@
+/* Reader (M5) — warm, Claude-inspired reading surface.
+   Palette is scoped to .reader-m5 so the rest of the app (Library, Account)
+   keeps its existing look. No global tokens are touched. */
+
+.reader-m5 {
+	--rdr-paper: #faf9f5; /* warm cream background */
+	--rdr-surface: #fffdf7; /* reading sheet */
+	--rdr-ink: #28261f; /* near-black warm ink */
+	--rdr-ink-soft: #6f6a5c; /* muted captions */
+	--rdr-line: #e9e3d5; /* hairline borders */
+	--rdr-accent: #c96442; /* Claude coral */
+	--rdr-accent-ink: #9a4527;
+
+	/* status tints */
+	--rdr-new-bg: #f4e2d7;
+	--rdr-new-line: #d79a7d;
+	--rdr-l1: #f0c794;
+	--rdr-l2: #f5d8ad;
+	--rdr-l3: #f9e6c8;
+	--rdr-l4: #fcf1de;
+	--rdr-ignored: #b3ab98;
+
+	min-height: 100%;
+	margin: -24px -32px; /* bleed over .app-main padding for a full warm canvas */
+	padding: 0 0 64px;
+	background: var(--rdr-paper);
+	color: var(--rdr-ink);
+}
+
+/* ---- top bar ---- */
+.rdr-bar {
+	position: sticky;
+	top: 0;
+	z-index: 5;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 14px 28px;
+	background: color-mix(in srgb, var(--rdr-paper) 88%, transparent);
+	backdrop-filter: saturate(1.1) blur(8px);
+	border-bottom: 1px solid var(--rdr-line);
+}
+.rdr-back,
+.rdr-bar-spacer {
+	flex: 1 1 0;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.rdr-bar-spacer {
+	justify-content: flex-end;
+}
+.rdr-back {
+	color: var(--rdr-ink-soft);
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	border-radius: 8px;
+	padding: 6px 8px;
+	transition: color 160ms ease, background 160ms ease;
+}
+.rdr-back:hover {
+	color: var(--rdr-accent-ink);
+	background: var(--rdr-new-bg);
+}
+.rdr-bar-title {
+	flex: 0 1 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	min-width: 0;
+}
+.rdr-book {
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 0.2px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 52vw;
+}
+.rdr-page-count {
+	font-size: 12px;
+	color: var(--rdr-ink-soft);
+}
+
+/* ---- reading sheet ---- */
+.rdr-page {
+	max-width: 680px;
+	margin: 40px auto 0;
+	padding: 48px 56px;
+	background: var(--rdr-surface);
+	border: 1px solid var(--rdr-line);
+	border-radius: 16px;
+	box-shadow: 0 1px 2px rgba(40, 38, 31, 0.04),
+		0 18px 48px -32px rgba(40, 38, 31, 0.28);
+}
+.rdr-title {
+	margin: 0 0 24px;
+	font-size: 26px;
+	line-height: 1.25;
+	letter-spacing: -0.01em;
+}
+.rdr-flow {
+	margin: 0;
+	white-space: pre-wrap; /* preserve the tokenizer's spaces + newlines */
+	word-break: break-word;
+	font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+		"Times New Roman", serif;
+	font-size: 21px;
+	line-height: 2.05;
+	color: var(--rdr-ink);
+}
+.rdr-empty {
+	color: var(--rdr-ink-soft);
+	font-style: italic;
+}
+
+/* ---- word tokens ---- */
+.rdr-punct {
+	white-space: pre-wrap;
+}
+.rdr-word {
+	border-radius: 5px;
+	padding: 1px 1px;
+	transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+.rdr-new {
+	background: var(--rdr-new-bg);
+	box-shadow: inset 0 -2px 0 var(--rdr-new-line);
+}
+.rdr-learning {
+	box-shadow: inset 0 -2px 0 rgba(154, 69, 39, 0.18);
+}
+.rdr-l1 {
+	background: var(--rdr-l1);
+}
+.rdr-l2 {
+	background: var(--rdr-l2);
+}
+.rdr-l3 {
+	background: var(--rdr-l3);
+}
+.rdr-l4 {
+	background: var(--rdr-l4);
+}
+.rdr-known {
+	background: transparent;
+}
+.rdr-ignored {
+	color: var(--rdr-ignored);
+	background: transparent;
+}
+.rdr-word:hover {
+	background: color-mix(in srgb, var(--rdr-accent) 16%, var(--rdr-surface));
+}
+.rdr-known:hover {
+	background: color-mix(in srgb, var(--rdr-accent) 8%, var(--rdr-surface));
+}
+
+/* ---- legend ---- */
+.rdr-legend {
+	max-width: 680px;
+	margin: 20px auto 0;
+	display: flex;
+	gap: 18px;
+	justify-content: center;
+	font-size: 13px;
+	color: var(--rdr-ink-soft);
+}
+.rdr-legend .rdr-word {
+	font-size: 13px;
+	padding: 2px 8px;
+}
+
+/* ---- navigation ---- */
+.rdr-nav {
+	max-width: 680px;
+	margin: 28px auto 0;
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+}
+.rdr-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 18px;
+	border-radius: 10px;
+	border: 1px solid var(--rdr-line);
+	background: var(--rdr-surface);
+	color: var(--rdr-ink);
+	font: inherit;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	text-decoration: none;
+	transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+.rdr-btn:hover {
+	background: var(--rdr-new-bg);
+	border-color: var(--rdr-new-line);
+	transform: translateY(-1px);
+}
+.rdr-btn--primary {
+	background: var(--rdr-accent);
+	border-color: var(--rdr-accent);
+	color: #fff;
+}
+.rdr-btn--primary:hover {
+	background: var(--rdr-accent-ink);
+	border-color: var(--rdr-accent-ink);
+}
+.rdr-btn.is-disabled {
+	opacity: 0.45;
+	cursor: default;
+	pointer-events: none;
+}
+.rdr-btn:focus-visible,
+.rdr-back:focus-visible {
+	outline: 2px solid var(--rdr-accent);
+	outline-offset: 2px;
+}
+
+/* ---- notices ---- */
+.rdr-notice {
+	max-width: 680px;
+	margin: 64px auto 0;
+	padding: 32px;
+	text-align: center;
+	background: var(--rdr-surface);
+	border: 1px solid var(--rdr-line);
+	border-radius: 14px;
+	color: var(--rdr-ink-soft);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+}
+.rdr-notice--error {
+	border-color: var(--rdr-new-line);
+}
+
+/* ---- loading skeleton ---- */
+.rdr-skel {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+.rdr-skel-line {
+	height: 18px;
+	border-radius: 6px;
+	background: linear-gradient(
+		90deg,
+		var(--rdr-new-bg) 25%,
+		#f6efe2 37%,
+		var(--rdr-new-bg) 63%
+	);
+	background-size: 400% 100%;
+	animation: rdr-shimmer 1.4s ease infinite;
+}
+@keyframes rdr-shimmer {
+	0% {
+		background-position: 100% 0;
+	}
+	100% {
+		background-position: 0 0;
+	}
+}
+
+@media (max-width: 640px) {
+	.reader-m5 {
+		margin: -24px -16px;
+	}
+	.rdr-page {
+		padding: 32px 22px;
+		margin-top: 24px;
+		border-radius: 12px;
+	}
+	.rdr-flow {
+		font-size: 19px;
+		line-height: 1.95;
+	}
+	.rdr-book {
+		max-width: 44vw;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reader-m5 *,
+	.reader-m5 *::before,
+	.reader-m5 *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}

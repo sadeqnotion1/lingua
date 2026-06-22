@@ -5,23 +5,23 @@ The AI rewrites this at the end of every session._
 > Repo: https://github.com/sadeqnotion1/lingua
 
 ## ➡️ The one next task
-**M5 — Reader.** Implement the reading interface that renders text word-by-word, displaying words colored by their learning status (new vs. known/learning) and integrating the tokenizer service `backend/app/services/parser.py`.
+**M6 — Terms.** Implement term interaction inside the reader screen. This includes clicking any word token to open a term drawer/modal, editing the translation, updating the familiarity status (0-5 or 98/99), linking a parent term, and persisting updates via a new backend API endpoint.
 
 ## Start the next chat with this
-> "Let's build M5 (Reader). Pull the reader page component (frontend/src/pages/Reader.tsx), the backend router/endpoints layout, and any relevant backend services so we can wire up the page rendering and status coloring."
+> "Let's build M6 (Terms). Pull the backend term routers and database models, and the frontend reader page so we can wire up the click-to-define lookup pane, status editing, and translation persistence."
 
 ## What to paste / give me at the start
 Pull these from the repo:
-1. `backend/app/routers/` (specifically if there's a text/reader router)
-2. `frontend/src/pages/Reader.tsx` (or the router/App.tsx wiring)
-3. Any existing API schemas for reading a text or page
+1. `backend/app/routers/` (specifically if there's a term or dictionary router)
+2. `backend/app/models/term.py` (the database models for terms)
+3. `frontend/src/pages/Reader.tsx` (the reader screen where we need to capture click events and show the term drawer)
 
-## Decisions I need from you for M5
-- Define the API structure: Should `GET /api/texts/{text_id}/reader` return the entire token list enriched with term status, or does the frontend match terms client-side?
-- Agree on the color palette for term statuses (0-5 or 0-99).
+## Decisions I need from you for M6
+- UI Design: Should the lookup form be a sliding side pane (drawer) next to the text or a floating modal?
+- API endpoints: Should we introduce a unified endpoint like `POST /api/terms` that handles both creation and updates (upsert) for terms?
 
 ## Definition of done for this task
-- Backend endpoint created to serve a text/book page as a sequence of token items (each carrying its text, `is_word` flag, and matched term status if it exists in the database).
-- Frontend `Reader.tsx` displays the book/text word-by-word, displaying non-words as normal text and word runs styled according to their familiarity level (e.g., new words highlighted in light blue/yellow).
-- Navigation controls (next/prev page, back to library shelf) functional.
-- Fully verified locally with no TypeScript/bundler or backend errors.
+- Clicking a word token in `Reader.tsx` opens a term lookup/edit interface showing the word, its current status, translation, and parent term link.
+- User can save status changes (1–5, 98, or null/0) and translations. Saving persists the changes to the database and updates the token color in the reader view dynamically without full page reload.
+- Full type-safety across backend schemas and frontend API client.
+- Fully verified locally with pytest and TypeScript checks passing.

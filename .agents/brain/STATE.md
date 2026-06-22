@@ -3,7 +3,7 @@
 > Single source of truth. If this disagrees with the real code, the **code wins** —
 > tell me and I fix the brain. Repo: https://github.com/sadeqnotion1/lingua
 
-**Status (one-liner):** M0–M4 done — Library shelves, imports, dynamic styles, and tokenizer are complete and verified. Next up: **M5 — Reader**.
+**Status (one-liner):** M0–M5 done — Reader interface renders word-by-word with status colors and page navigation. Next up: **M6 — Terms**.
 
 | Part | Status | Notes |
 |---|---|---|
@@ -14,8 +14,8 @@
 | M2 Library API | ✅ | Endpoints for listing books grouped by language and importing books implemented; duplicate checks (raise 409 Conflict + return existing) in place; 9 unit tests green. |
 | M3 Library UI (shelves + import bar) | ✅ | Matches screenshot 1. Polished with font-smoothing, focus rings, hover-zoom covers, and reduced motion paths. |
 | M4 Tokenizer (`services/parser.py`) | ✅ | Lossless, Lute-style alternating runs parser implemented and verified with 22 unit tests. |
-| M5 Reader | ⬜ | Word-by-word render + status colors. **← NEXT** |
-| M6 Terms (status, parent, translation) | ⬜ | |
+| M5 Reader | ✅ | Word-by-word render + status colors and page navigation complete and verified. |
+| M6 Terms (status, parent, translation) | ⬜ | Click-to-define and status editing. **← NEXT** |
 | M7 Account page | ⬜ | Matches screenshot 2. |
 | M8 Polish (stats, search, settings) | ⬜ | |
 
