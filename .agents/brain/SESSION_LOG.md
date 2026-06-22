@@ -1,6 +1,14 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-22 — M8 Polish ✅ (wrap-up)
+- Completed **M8 — Polish** by applying the package from `.agents/fixes/1441`.
+  - Backend new: models/setting.py; schemas/{stats,search,settings}.py; services/{stats,search,settings}.py; routers/{stats,search,settings}.py.
+  - Backend changed: main.py (include 3 routers), models/__init__.py (+Setting).
+  - Frontend new: api/m8.ts; pages/{Dashboard,Search,Settings}.tsx; styles/{theme,dashboard,search,settings}.css.
+  - Frontend changed: App.tsx (routes + landing + theme boot), components/Sidebar.tsx (nav + icons).
+  - Verified: Running verify_m8.py in the root passes all compiler, schema validation, and helper function tests; python pytest passes 105 tests; npm run build builds the React app cleanly with TypeScript.
+
 ## 2026-06-22 — M7 Account page ✅ (wrap-up)
 - Completed **M7 — Account page** by applying the package from `.agents/fixes/8566222026`.
   - Copied new backend files: `backend/app/models/user.py` (User model with table `users`), `backend/app/schemas/account.py` (AccountOut schema), and `backend/app/services/account.py` (Account service layer with `get_account` and `serialize_account`).

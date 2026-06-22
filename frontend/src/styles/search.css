@@ -1,0 +1,128 @@
+/* Global search (M8). Uses the GLOBAL design tokens so it follows the theme. */
+
+.srch {
+  padding: 32px 36px;
+  max-width: 880px;
+  margin: 0 auto;
+  color: var(--ink);
+}
+
+.srch h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.srch-box {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.srch-input {
+  width: 100%;
+  padding: 13px 15px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.srch-input:focus {
+  border-color: var(--accent);
+}
+
+.srch-meta {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 6px 2px 18px;
+  min-height: 16px;
+}
+
+.srch-group {
+  margin-bottom: 26px;
+}
+
+.srch-group h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.srch-hit {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.srch-hit:hover {
+  border-color: var(--accent);
+}
+
+.srch-hit .title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.srch-hit .snippet {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.srch-hit .sub {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.srch-hit mark {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+.srch-term {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.srch-term .term-text {
+  font-weight: 600;
+}
+
+.srch-term .term-tr {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.status-pill {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.srch-state {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--muted);
+}

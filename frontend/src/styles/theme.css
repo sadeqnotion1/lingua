@@ -1,0 +1,22 @@
+/* M8 theme tokens.
+ *
+ * Light is the existing global default (defined in styles/global.css). Dark is
+ * an override keyed on the data-theme attribute that api/m8.ts sets on
+ * <html>. Pages that read the GLOBAL tokens (var(--bg) etc.) adapt for free.
+ */
+
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --ink: #e6e8ec;
+  --muted: #9aa1ac;
+  --line: #2a2f3a;
+}
+
+/* Smooth the switch without being distracting. */
+:root {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}

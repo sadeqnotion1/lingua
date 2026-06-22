@@ -3,7 +3,11 @@
 > Single source of truth. If this disagrees with the real code, the **code wins** —
 > tell me and I fix the brain. Repo: https://github.com/sadeqnotion1/lingua
 
-**Status (one-liner):** M0–M6 done — Terms fully interactive in reader, drawer slides in, status/translation persist. Next up: **M7 — Account page**.
+**Status (one-liner):** M8 (Polish) implemented - Dashboard, global Search, Settings.
+  - Backend: stats/search/settings services + routers wired in main.py; new app_settings table (Setting model).
+  - Frontend: Dashboard/Search/Settings pages, api/m8.ts client + theme helpers, Sidebar + App routes updated; Dashboard is the landing page.
+  - Verified offline (py_compile, pure-logic unit tests, schema construction, prettier). Live uvicorn+vite run pending local confirmation.
+Next up: Smoke-test M8 locally, then plan next steps from Backlog (see ROADMAP.md).
 
 | Part | Status | Notes |
 |---|---|---|
@@ -17,7 +21,7 @@
 | M5 Reader | ✅ | Word-by-word render + status colors and page navigation complete and verified. |
 | M6 Terms (status, parent, translation) | ✅ | Click-to-define drawer, status selection, translation/parent persistence. Complete & verified. |
 | M7 Account page | ✅ | Matches screenshot 2. Read-only profile backed by local User row. |
-| M8 Polish (stats, search, settings) | ⬜ | **← NEXT** |
+| M8 Polish (stats, search, settings) | ✅ | Dashboard, global search, settings screens and services. |
 
 ## Open decisions / questions waiting on you
 - **D5 (still open):** keep `.agents/` tracked in the public repo, or re-ignore it?

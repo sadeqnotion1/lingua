@@ -14,7 +14,7 @@ Don't start the next one until the current one's acceptance criteria pass.
 - **M5 — Reader** ✅ — word-by-word render + status colors and page navigation.
 - **M6 — Terms** ✅ — status, parent term, translation.
 - **M7 — Account page** ✅ — matches screenshot 2. Read-only profile backed by local DB-backed User.
-- **M8 — Polish** — stats, search, settings. **← NEXT**
+- **M8 — Polish** ✅ — stats, search, settings.
 
 ## Backlog / maybe-later
 - Audio + sentence playback, dictionary/translation API integration, SRS review

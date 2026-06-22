@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import init_db
-from app.routers import account, library, reading, terms
+from app.routers import account, library, reading, search, settings as settings_router, stats, terms
 
 app = FastAPI(title=f"{settings.app_name} API", version="0.1.0")
 
@@ -28,11 +28,15 @@ def health() -> dict:
     return {"status": "ok", "app": settings.app_name, "version": "0.1.0"}
 
 
-# Feature routers (stubs for now).
+# Feature routers.
 app.include_router(library.router, prefix="/api")
 app.include_router(reading.router, prefix="/api")
 app.include_router(terms.router, prefix="/api")
 app.include_router(account.router, prefix="/api")
+# M8 - polish (dashboard stats, global search, settings).
+app.include_router(stats.router, prefix="/api")
+app.include_router(search.router, prefix="/api")
+app.include_router(settings_router.router, prefix="/api")
 
 # Serve the built frontend if present (production / local run).
 if settings.frontend_dist.exists():

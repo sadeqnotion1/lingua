@@ -29,5 +29,7 @@
 
 - **D8 — Duplicate book imports raise 409 Conflict.** When importing a book, if a book with the same title already exists in the target language, we return a `409 Conflict` containing the existing book metadata. This avoids accidental duplicate shelf-cards. (Session 2026-06-21, M2.)
 - **D9 — Single local User model + seeded user.** A single local user row in the SQLite database backs the Account page details. Profile settings remain read-only until authentication/editing is added. (Session 2026-06-22, M7.)
+- **D10 (M8) — Dashboard is the landing route.** `/` redirects to `/dashboard`; unknown routes also redirect there. Library remains at `/library`.
+- **D11 (M8) — Settings preferences stored in a new `app_settings` key/value table.** The Setting model is used rather than widening the single-row User. Theme + accent are persisted server-side AND in localStorage (instant apply, no theme flash). Settings that are not supported (e.g. password, billing, billing plans) are clearly labeled as "Not available in this build" rather than being faked.
 
 ---

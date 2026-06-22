@@ -1,0 +1,187 @@
+/* Settings (M8). Uses the GLOBAL design tokens so it follows the theme. */
+
+.settings-m8 {
+  padding: 32px 36px;
+  max-width: 820px;
+  margin: 0 auto;
+  color: var(--ink);
+}
+
+.settings-m8 h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+.set-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+
+.set-card h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.set-card .set-hint {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+.set-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.set-row label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.set-input,
+.set-select {
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  max-width: 360px;
+  box-sizing: border-box;
+}
+
+.set-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.set-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.set-readonly {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.set-readonly .ro {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.set-readonly .ro .num {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.set-readonly .ro .lab {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.set-lang {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.set-lang .lang-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.set-lang .lang-name {
+  font-weight: 600;
+}
+
+.set-lang .lang-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.set-checks {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.set-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.set-msg {
+  font-size: 13px;
+  margin-left: 10px;
+}
+.set-msg.ok {
+  color: #4f9d5b;
+}
+.set-msg.err {
+  color: #d6504e;
+}
+
+.set-swatch {
+  width: 38px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.set-unavailable {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.set-unavailable code {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0 4px;
+}
