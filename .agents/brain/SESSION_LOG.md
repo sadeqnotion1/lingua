@@ -1,6 +1,15 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-22 — M8 Polish minor-findings fixes ✅
+- Perf: memoized dashboard word counts (content fingerprint, never stale); removed search N+1 (grouped page-count + IN-batched parent books).
+- Search race guard: AbortController + request-id in Search.tsx.
+- Book search hits deep-link to /library?q=<title>; Library seeds filter from URL.
+- Theme "System" now live via matchMedia; accent auto-saves (debounced).
+- Email validated (stdlib regex, no new dep); startup moved to FastAPI lifespan.
+- Verified offline (py_compile + pure-logic unit tests + prettier); live uvicorn+vite smoke-test done on local machine.
+- Deferred: SQLite FTS5 search (schema-level migration) — logged as a future item.
+
 ## 2026-06-22 — M8 Polish ✅ (wrap-up)
 - Completed **M8 — Polish** by applying the package from `.agents/fixes/1441`.
   - Backend new: models/setting.py; schemas/{stats,search,settings}.py; services/{stats,search,settings}.py; routers/{stats,search,settings}.py.

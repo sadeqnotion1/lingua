@@ -5,10 +5,14 @@ imports like services/reading.py and runs a case-insensitive 'contains' match
 over books, texts and terms. Terms reuse the precomputed ``text_lower`` column
 (DECISIONS D6); books/texts are lower-cased in SQL. Results are capped so a huge
 library can't return an unbounded payload.
+
+Perf note (minor-finding fix): page counts and the parent book of each text hit
+are now fetched in a single grouped/IN query each, instead of lazy-loading per
+row (no N+1).
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Dict, List
 
 if TYPE_CHECKING:  # pragma: no cover - typing only, avoids a hard runtime dep
     from sqlalchemy.orm import Session
@@ -68,13 +72,26 @@ def search(db: "Session", query: str, limit: int = DEFAULT_LIMIT) -> dict:
         .limit(limit)
         .all()
     )
+
+    # Page counts for the matched books in one grouped query (no per-book N+1).
+    book_ids = [b.id for b in book_rows]
+    page_counts: Dict[int, int] = {}
+    if book_ids:
+        for bid, n in (
+            db.query(Text.book_id, func.count(Text.id))
+            .filter(Text.book_id.in_(book_ids))
+            .group_by(Text.book_id)
+            .all()
+        ):
+            page_counts[bid] = n
+
     books: List[dict] = [
         {
             "id": b.id,
             "title": b.title,
             "language_id": b.language_id,
             "language_name": lang_names.get(b.language_id),
-            "page_count": len(b.texts),
+            "page_count": page_counts.get(b.id, 0),
         }
         for b in book_rows
     ]
@@ -90,9 +107,17 @@ def search(db: "Session", query: str, limit: int = DEFAULT_LIMIT) -> dict:
         .limit(limit)
         .all()
     )
+
+    # Resolve parent books for the matched texts in one IN query (no per-text N+1).
+    text_book_ids = {t.book_id for t in text_rows if t.book_id is not None}
+    books_by_id: Dict[int, object] = {}
+    if text_book_ids:
+        for b in db.query(Book).filter(Book.id.in_(text_book_ids)).all():
+            books_by_id[b.id] = b
+
     texts: List[dict] = []
     for t in text_rows:
-        book = t.book
+        book = books_by_id.get(t.book_id)
         lid = book.language_id if book is not None else None
         body = (
             t.content

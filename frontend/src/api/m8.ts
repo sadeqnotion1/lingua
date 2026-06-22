@@ -131,8 +131,13 @@ export interface LanguageSettingUpdate {
 
 export const m8 = {
   getStats: () => req<Stats>("/stats"),
-  search: (q: string) =>
-    req<SearchResults>(`/search?q=${encodeURIComponent(q)}`),
+  // `signal` lets the caller cancel an in-flight search so a slow earlier
+  // response can't overwrite a newer one (see Search.tsx race guard).
+  search: (q: string, signal?: AbortSignal) =>
+    req<SearchResults>(
+      `/search?q=${encodeURIComponent(q)}`,
+      signal ? { signal } : undefined,
+    ),
   getSettings: () => req<AppSettings>("/settings"),
   updateSettings: (body: SettingsUpdate) =>
     req<AppSettings>("/settings", {
@@ -198,6 +203,19 @@ export function applySavedAppearance(): void {
   applyTheme(getSavedTheme());
   const accent = getSavedAccent();
   if (accent) applyAccent(accent);
+}
+
+// Keep the "System" theme live: when the OS flips light/dark while the app is
+// open, re-resolve the theme (only while the saved choice is actually
+// "system"). Returns an unsubscribe fn. No-op where matchMedia is unavailable.
+export function watchSystemTheme(): () => void {
+  const mql = window.matchMedia?.("(prefers-color-scheme: dark)");
+  if (!mql) return () => {};
+  const onChange = () => {
+    if (getSavedTheme() === "system") applyTheme("system");
+  };
+  mql.addEventListener?.("change", onChange);
+  return () => mql.removeEventListener?.("change", onChange);
 }
 
 export const STATUS_LABELS: Record<number, string> = {

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import ShelfRow from "../components/ShelfRow"
 import { api, ApiError, type LanguageGroup } from "../api/client"
 import "../styles/library.css"
@@ -10,9 +11,12 @@ import "../styles/library.css"
 type LoadState = "loading" | "ready" | "error"
 
 export default function Library() {
+	// A book hit on the Search screen deep-links here as /library?q=<title>, so
+	// seed the filter from the URL to land on (or near) that book.
+	const [searchParams] = useSearchParams()
 	const [groups, setGroups] = useState<LanguageGroup[]>([])
 	const [loadState, setLoadState] = useState<LoadState>("loading")
-	const [query, setQuery] = useState("")
+	const [query, setQuery] = useState(() => searchParams.get("q") ?? "")
 	const [importOpen, setImportOpen] = useState(false)
 
 	// Import form state.

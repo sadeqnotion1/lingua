@@ -1,4 +1,6 @@
 """FastAPI application: wires routers and serves the built SPA."""
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -7,7 +9,15 @@ from app.config import settings
 from app.database import init_db
 from app.routers import account, library, reading, search, settings as settings_router, stats, terms
 
-app = FastAPI(title=f"{settings.app_name} API", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Create tables on startup (replaces the deprecated on_event hook)."""
+    init_db()
+    yield
+
+
+app = FastAPI(title=f"{settings.app_name} API", version="0.1.0", lifespan=lifespan)
 
 # Allow the Vite dev server to call the API during development.
 app.add_middleware(
@@ -16,11 +26,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-def _startup() -> None:
-    init_db()
 
 
 @app.get("/api/health")

@@ -17,5 +17,6 @@ Don't start the next one until the current one's acceptance criteria pass.
 - **M8 — Polish** ✅ — stats, search, settings.
 
 ## Backlog / maybe-later
+- [ ] Search at scale: migrate global search to SQLite FTS5 (virtual table + sync triggers) when libraries grow large.
 - Audio + sentence playback, dictionary/translation API integration, SRS review
   queue, export of known terms, multi-user/auth, deployment packaging.

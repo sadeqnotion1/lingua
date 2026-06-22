@@ -30,26 +30,42 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Cancel the previous request and ignore any out-of-order response so a slow
+  // earlier search can never overwrite the results of a newer one.
+  const controller = useRef<AbortController | null>(null);
+  const reqId = useRef(0);
 
   const trimmed = query.trim();
 
   useEffect(() => {
     if (timer.current) clearTimeout(timer.current);
     if (!trimmed) {
+      controller.current?.abort();
       setResults(null);
       setError(null);
       setLoading(false);
       return;
     }
     setLoading(true);
+    const id = ++reqId.current;
     timer.current = setTimeout(() => {
-      m8.search(trimmed)
+      controller.current?.abort();
+      const ac = new AbortController();
+      controller.current = ac;
+      m8.search(trimmed, ac.signal)
         .then((r) => {
+          if (id !== reqId.current) return; // a newer query superseded this one
           setResults(r);
           setError(null);
         })
-        .catch((e) => setError(e?.message || "Search failed"))
-        .finally(() => setLoading(false));
+        .catch((e) => {
+          if (e?.name === "AbortError") return; // cancelled on purpose
+          if (id !== reqId.current) return;
+          setError(e?.message || "Search failed");
+        })
+        .finally(() => {
+          if (id === reqId.current) setLoading(false);
+        });
     }, 250);
     return () => {
       if (timer.current) clearTimeout(timer.current);
@@ -89,7 +105,11 @@ export default function Search() {
         <section className="srch-group">
           <h2>Books</h2>
           {results.books.map((b) => (
-            <Link className="srch-hit" to="/library" key={`b${b.id}`}>
+            <Link
+              className="srch-hit"
+              to={`/library?q=${encodeURIComponent(b.title)}`}
+              key={`b${b.id}`}
+            >
               <div className="title">{highlight(b.title, results.query)}</div>
               <div className="sub">
                 {b.language_name ? `${b.language_name} \u00b7 ` : ""}

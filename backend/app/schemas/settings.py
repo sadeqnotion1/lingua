@@ -10,9 +10,14 @@ Settings are bound to real rows only (Delivery Standard 4):
 """
 from __future__ import annotations
 
+import re
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+# Lightweight, dependency-free email check (avoids pulling in email-validator).
+# Intentionally permissive: one '@', a dot in the domain, no whitespace.
+_EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 class ProfileOut(BaseModel):
@@ -27,6 +32,24 @@ class ProfileOut(BaseModel):
 class ProfileUpdate(BaseModel):
     username: Optional[str] = Field(default=None, min_length=1)
     email: Optional[str] = None
+
+    @field_validator("email")
+    @classmethod
+    def _validate_email(cls, v: Optional[str]) -> Optional[str]:
+        """Reject malformed emails so a bad value never reaches the DB.
+
+        ``None`` means 'leave unchanged' and is allowed through untouched.
+        A provided value must be a non-empty, syntactically valid address;
+        the cleaned (stripped) value is returned.
+        """
+        if v is None:
+            return v
+        cleaned = v.strip()
+        if not cleaned:
+            raise ValueError("Email must not be empty.")
+        if not _EMAIL_RE.match(cleaned):
+            raise ValueError("Enter a valid email address.")
+        return cleaned
 
 
 class LanguageSettingOut(BaseModel):

@@ -4,10 +4,17 @@ The pure helpers (``bucket_statuses`` / ``count_words``) avoid importing the ORM
 so they can be imported and unit-tested with only the stdlib + the M4 tokenizer.
 The DB-facing ``get_stats`` defers model imports, mirroring services/reading.py.
 Nothing here is mocked: every number comes from the real rows.
+
+Perf note (minor-finding fix): tokenizing the whole library on every dashboard
+load is the expensive part. ``count_words_cached`` memoizes the word count per
+text, keyed by a cheap content fingerprint, so an unchanged page is only
+tokenized once. Editing a page changes its fingerprint and forces a recompute,
+so the cache can never go stale.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterable, List, Optional
+import hashlib
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple
 
 # Tokenizer from M4 (stdlib-only). Reused verbatim so 'words' matches the reader.
 from app.services.parser import DEFAULT_WORD_CHARS, tokenize_tagged
@@ -50,6 +57,40 @@ def count_words(content: Optional[str], word_chars: Optional[str] = None) -> int
     )
 
 
+# text_id -> (fingerprint, word_count). Bounded by the number of texts.
+_WORD_COUNT_CACHE: Dict[int, Tuple[str, int]] = {}
+
+
+def _fingerprint(content: Optional[str], word_chars: str) -> str:
+    """Cheap content+config signature. Hashing is far cheaper than tokenizing."""
+    h = hashlib.md5()
+    h.update(word_chars.encode("utf-8"))
+    h.update(b"\x00")
+    h.update((content or "").encode("utf-8"))
+    return h.hexdigest()
+
+
+def count_words_cached(
+    text_id: Optional[int], content: Optional[str], word_chars: Optional[str] = None
+) -> int:
+    """Memoized :func:`count_words`, keyed by text id + content fingerprint.
+
+    Falls back to a plain (uncached) count when ``text_id`` is None. The cache
+    is correctness-safe: any change to the content or word_chars changes the
+    fingerprint, so a recompute happens automatically.
+    """
+    wc = word_chars or DEFAULT_WORD_CHARS
+    if text_id is None:
+        return count_words(content, wc)
+    fp = _fingerprint(content, wc)
+    cached = _WORD_COUNT_CACHE.get(text_id)
+    if cached is not None and cached[0] == fp:
+        return cached[1]
+    n = count_words(content, wc)
+    _WORD_COUNT_CACHE[text_id] = (fp, n)
+    return n
+
+
 def get_stats(db: "Session") -> dict:
     """Assemble dashboard aggregates over the whole library."""
     from app.models.book import Book
@@ -81,7 +122,7 @@ def get_stats(db: "Session") -> dict:
         word_chars = (
             lang_by_id[lid].word_chars if lid in lang_by_id else DEFAULT_WORD_CHARS
         )
-        words = count_words(t.content, word_chars)
+        words = count_words_cached(t.id, t.content, word_chars)
         if lid in per:
             per[lid]["texts"] += 1
             per[lid]["words"] += words

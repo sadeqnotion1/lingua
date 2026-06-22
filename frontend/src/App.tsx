@@ -7,14 +7,15 @@ import Account from "./pages/Account";
 import Dashboard from "./pages/Dashboard";
 import Search from "./pages/Search";
 import Settings from "./pages/Settings";
-import { applySavedAppearance } from "./api/m8";
+import { applySavedAppearance, watchSystemTheme } from "./api/m8";
 import "./styles/theme.css";
 
 export default function App() {
   // Apply the saved theme/accent before first paint of real content so there
-  // is no flash of the wrong theme.
+  // is no flash of the wrong theme, then keep "System" in sync with the OS.
   useEffect(() => {
     applySavedAppearance();
+    return watchSystemTheme();
   }, []);
 
   return (

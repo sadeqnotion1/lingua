@@ -31,5 +31,6 @@
 - **D9 — Single local User model + seeded user.** A single local user row in the SQLite database backs the Account page details. Profile settings remain read-only until authentication/editing is added. (Session 2026-06-22, M7.)
 - **D10 (M8) — Dashboard is the landing route.** `/` redirects to `/dashboard`; unknown routes also redirect there. Library remains at `/library`.
 - **D11 (M8) — Settings preferences stored in a new `app_settings` key/value table.** The Setting model is used rather than widening the single-row User. Theme + accent are persisted server-side AND in localStorage (instant apply, no theme flash). Settings that are not supported (e.g. password, billing, billing plans) are clearly labeled as "Not available in this build" rather than being faked.
+- **D12 (M8) — Dashboard word counts are memoized.** Counts are memoized per-text using a content fingerprint (MD5 hash of word_chars + content). The cache invalidates automatically if the text's contents or the language's word characters change. Full-text search via SQLite FTS5 is deferred until the library size warrants virtual table schema migrations.
 
 ---

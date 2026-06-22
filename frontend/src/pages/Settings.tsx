@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   applyAccent,
   applyTheme,
@@ -116,6 +116,9 @@ export default function Settings() {
   // Appearance.
   const [theme, setTheme] = useState("system");
   const [accent, setAccent] = useState("#2f80ed");
+  // Debounce the server-side persist of the accent so it saves automatically
+  // (like the theme does) instead of only on an explicit button click.
+  const accentTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function hydrate(s: AppSettings) {
     setSettings(s);
@@ -136,6 +139,9 @@ export default function Settings() {
 
   useEffect(() => {
     load();
+    return () => {
+      if (accentTimer.current) clearTimeout(accentTimer.current);
+    };
   }, []);
 
   function saveProfile() {
@@ -161,9 +167,14 @@ export default function Settings() {
   function onAccentInput(value: string) {
     setAccent(value);
     applyAccent(value);
+    if (accentTimer.current) clearTimeout(accentTimer.current);
+    accentTimer.current = setTimeout(() => {
+      m8.updateSettings({ preferences: { accent: value } }).catch(() => {});
+    }, 400);
   }
 
   function saveAccent() {
+    if (accentTimer.current) clearTimeout(accentTimer.current);
     applyAccent(accent);
     m8.updateSettings({ preferences: { accent } }).catch(() => {});
   }
