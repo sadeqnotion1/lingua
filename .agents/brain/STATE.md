@@ -3,9 +3,9 @@
 > Single source of truth. If this disagrees with the real code, the **code wins** —
 > tell me and I fix the brain. Repo: https://github.com/sadeqnotion1/lingua
 
-**Status (one-liner):** M8 (Polish) ✅ **verified live** — Dashboard, global Search, and Settings all pass an end-to-end smoke test (uvicorn + vite). M0–M8 complete; **no active milestone** — next chat selects + scopes the first Backlog item as M9 (see NEXT.md / ROADMAP.md).
+**Status (one-liner):** M9 (FTS5 Search) ✅ **verified live** — Global search migrated to SQLite FTS5 index (trigram tokenizer + sync triggers) with bm25 ranking and short-query/fallback LIKE support. M0–M9 complete; **no active milestone** — next chat selects + scopes the first Backlog item as M10 (see NEXT.md / ROADMAP.md).
   - Live smoke-test (2026-06-22): `/dashboard`, `/search`, `/settings` load; Dashboard totals correct (1 lang / 1 book / 2 pages / 21 words / 5 terms) + vocab status bar/legend; search query "sample" returns 3 hits across Books/Pages/Terms and page hits open the reader (`/read/1`); profile + theme (dark/light/system) + accent + per-language (`word_chars`/RTL/romanization) all persist; `app_settings` table auto-created on boot (`init_db`).
-Next up: Pick + scope the next milestone (M9) from Backlog, then build it (front-runner: SQLite FTS5 search-at-scale). See NEXT.md.
+Next up: Pick + scope the next milestone (M10) from Backlog, then build it. See NEXT.md.
 
 | Part | Status | Notes |
 |---|---|---|
@@ -20,9 +20,10 @@ Next up: Pick + scope the next milestone (M9) from Backlog, then build it (front
 | M6 Terms (status, parent, translation) | ✅ | Click-to-define drawer, status selection, translation/parent persistence. Complete & verified. |
 | M7 Account page | ✅ | Matches screenshot 2. Read-only profile backed by local User row. |
 | M8 Polish (stats, search, settings) | ✅ verified | Dashboard, global search, settings. **Live smoke-test passed 2026-06-22** (uvicorn+vite) — all acceptance criteria green. |
+| M9 FTS5 Search-at-scale | ✅ verified | FTS5 external-content virtual tables + trigram substring matching + automated sync triggers. **Live smoke-test passed 2026-06-22**. |
 
 ## Open decisions / questions waiting on you
-- **Next milestone (M9):** choose the first Backlog item to build (front-runner: **SQLite FTS5 search-at-scale**). See NEXT.md for candidates.
+- **Next milestone (M10):** choose the next Backlog item to build. See NEXT.md for candidates.
 
 ## Resolved this session
 - **D5 → resolved (D13):** keep `.agents/` **tracked** in the public repo (Option A); never commit secrets/API keys.

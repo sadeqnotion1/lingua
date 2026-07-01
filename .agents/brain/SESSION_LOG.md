@@ -1,6 +1,16 @@
 # SESSION LOG — append-only
 > Newest entries at the top. Repo: https://github.com/sadeqnotion1/lingua
 
+## 2026-06-22 — M9 SQLite FTS5 Search-at-scale ✅ (wrap-up)
+- Completed **M9 — SQLite FTS5 Search-at-scale** using the delivery from `.agents/fixes/823`.
+  - Added new backend service file `backend/app/services/search_fts.py` implementing virtual tables, triggers, and ranked search via `bm25`.
+  - Added test suite `backend/tests/test_search_fts.py` covering parity, trigger synchronization, updates/deletions, backfill, and short query fallback.
+  - Edited `backend/app/database.py` to auto-initialize the index on engine setup.
+  - Edited `backend/app/routers/search.py` to transparently route queries to `search_fts`.
+  - Fixed a bug in the provided FTS5 kit's backfill check where virtual table counts on external-content tables query the base tables directly; corrected it to query `<fts_table>_docsize` to detect empty indexes correctly.
+  - Verified: All 113 backend unit and integration tests pass successfully; local curl search smoke tests return expected results with bm25 ranking.
+- **Stop point:** M9 complete. Next session picks milestone **M10** from Backlog.
+
 ## 2026-06-22 — M8 smoke-test verified ✅ + housekeeping (wrap-up)
 - Live smoke-test of M8 on local machine (uvicorn + vite): **all acceptance criteria PASS**.
   - `/dashboard`, `/search`, `/settings` load.

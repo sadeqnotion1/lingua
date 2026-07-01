@@ -8,7 +8,10 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas.search import SearchResults
-from app.services import search as service
+# M9: FTS5-backed search. search_fts mirrors services/search's contract and
+# internally falls back to the original LIKE search for empty/short queries or
+# if FTS5 is unavailable, so behaviour never regresses.
+from app.services import search_fts as service
 
 router = APIRouter(prefix="/search", tags=["search"])
 

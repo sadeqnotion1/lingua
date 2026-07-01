@@ -18,6 +18,11 @@ def init_db() -> None:
 
     Base.metadata.create_all(bind=engine)
 
+    # === M9 (SQLite FTS5) — create the search index + triggers, backfill once ===
+    from app.services.search_fts import ensure_index
+
+    ensure_index(engine)
+
 
 def get_db():
     """FastAPI dependency that yields a scoped session."""
